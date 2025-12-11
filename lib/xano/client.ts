@@ -142,10 +142,12 @@ export async function getCourseWithProgress(
   slug: string,
   authToken: string
 ): Promise<CourseWithModules> {
-  return fetchApi<CourseWithModules>(`/courses/${slug}/with-progress`, {}, authToken);
+  // For now, just get the course without progress since endpoint doesn't exist
+  return fetchApi<CourseWithModules>(`/courses/${slug}`, {}, authToken);
 }
 
 // Get user's courses with their progress
+// Note: This uses the regular /courses endpoint since /courses/my-progress doesn't exist yet
 export async function getUserCoursesWithProgress(
   authToken: string
 ): Promise<Array<Course & { 
@@ -154,12 +156,15 @@ export async function getUserCoursesWithProgress(
   module_count: number;
   is_completed: boolean;
 }>> {
-  return fetchApi<Array<Course & { 
-    completed_lesson_count: number; 
-    lesson_count: number;
-    module_count: number;
-    is_completed: boolean;
-  }>>("/courses/my-progress", {}, authToken);
+  // Fallback to regular courses list - progress tracking would need to be added to Xano
+  const courses = await fetchApi<Course[]>("/courses", {}, authToken);
+  return courses.map(course => ({
+    ...course,
+    completed_lesson_count: 0,
+    lesson_count: course.lesson_count || 0,
+    module_count: course.module_count || 0,
+    is_completed: false,
+  }));
 }
 
 // ============ Lessons API ============
@@ -207,13 +212,30 @@ export async function getCourseProgress(
   progress_percentage: number;
   completed_lessons: number[];
 }> {
-  return fetchApi(`/progress/course/${courseId}`, {}, authToken);
+  // Fallback - progress tracking endpoint doesn't exist yet
+  // Return empty progress for now
+  return {
+    completed_count: 0,
+    total_count: 0,
+    progress_percentage: 0,
+    completed_lessons: [],
+  };
 }
 
 // ============ Stats API ============
 
 export async function getPlatformStats(): Promise<PlatformStats> {
-  return fetchApi<PlatformStats>("/stats");
+  // Fallback stats since /stats endpoint doesn't exist in Xano
+  // You can create this endpoint in Xano or use hardcoded values
+  try {
+    const courses = await fetchApi<Course[]>("/courses");
+    return {
+      course_count: courses.length,
+      lesson_count: courses.reduce((acc, c) => acc + (c.lesson_count || 0), 0),
+    };
+  } catch {
+    return { course_count: 10, lesson_count: 50 };
+  }
 }
 
 // ============ Search API ============

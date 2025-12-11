@@ -20,6 +20,19 @@ import {
 
 const AUTH_TOKEN_KEY = "xano_auth_token";
 
+// Helper to set cookie (for middleware to read)
+function setAuthCookie(token: string) {
+  // Set cookie with 7 days expiry
+  const expires = new Date();
+  expires.setDate(expires.getDate() + 7);
+  document.cookie = `${AUTH_TOKEN_KEY}=${token}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`;
+}
+
+// Helper to remove cookie
+function removeAuthCookie() {
+  document.cookie = `${AUTH_TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+}
+
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
@@ -59,12 +72,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const storedToken = localStorage.getItem(AUTH_TOKEN_KEY);
         if (storedToken) {
           setAuthToken(storedToken);
+          // Sync cookie with localStorage token for middleware
+          setAuthCookie(storedToken);
           const userData = await getCurrentUser(storedToken);
           setUser(userData);
+        } else {
+          // No token in localStorage, ensure cookie is also cleared
+          removeAuthCookie();
         }
       } catch (error) {
         // Token is invalid, clear it
         localStorage.removeItem(AUTH_TOKEN_KEY);
+        removeAuthCookie();
         setAuthToken(null);
         setUser(null);
       } finally {
@@ -80,6 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await apiLogin(email, password);
       localStorage.setItem(AUTH_TOKEN_KEY, response.authToken);
+      setAuthCookie(response.authToken);
       setAuthToken(response.authToken);
       setUser(response.user);
     } finally {
@@ -99,6 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const response = await apiSignup(email, password, firstName, lastName, role);
         localStorage.setItem(AUTH_TOKEN_KEY, response.authToken);
+        setAuthCookie(response.authToken);
         setAuthToken(response.authToken);
         setUser(response.user);
       } finally {
@@ -110,6 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
+    removeAuthCookie();
     setAuthToken(null);
     setUser(null);
     router.push("/");
