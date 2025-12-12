@@ -7,16 +7,34 @@
 <div align="center"><b>AI-First Learning Management System powered by Xano</b></div>
 
 
-[![Xano Backend](https://img.shields.io/badge/Xano-Backend%20%26%20Database-00DC82?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMOSAyMUwxOSAxNVY1TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==)](https://www.xano.com/)
-[![Live DEMO](https://img.shields.io/badge/Test%20the%20App-Live%20Demo-2563EB?style=for-the-badge&logo=vercel)](https://simply-learn-xano.vercel.app/)
-[![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![Gemini AI](https://img.shields.io/badge/Gemini-2.5%20Flash-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
-[![MUX Video](https://img.shields.io/badge/MUX-Video-FF5A5F?style=for-the-badge)](https://www.mux.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
+<!-- Badges: responsive horizontal list that wraps when necessary -->
+<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;max-width:1100px;margin:0 auto;">
+	<a href="https://www.xano.com/" target="_blank" rel="noreferrer">
+		<img src="https://img.shields.io/badge/Xano-Backend%20%26%20Database-00DC82?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMOSAyMUwxOSAxNVY1TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==" alt="Xano Backend" />
+	</a>
+	<a href="https://simply-learn-xano.vercel.app/" target="_blank" rel="noreferrer">
+		<img src="https://img.shields.io/badge/Test%20the%20App-Live%20Demo-2563EB?style=for-the-badge&logo=vercel" alt="Live Demo" />
+	</a>
+	<a href="https://nextjs.org/" target="_blank" rel="noreferrer">
+		<img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+	</a>
+	<a href="https://ai.google.dev/" target="_blank" rel="noreferrer">
+		<img src="https://img.shields.io/badge/Gemini-2.5%20Flash-4285F4?style=for-the-badge&logo=google" alt="Gemini AI" />
+	</a>
+	<a href="https://www.mux.com/" target="_blank" rel="noreferrer">
+		<img src="https://img.shields.io/badge/MUX-Video-FF5A5F?style=for-the-badge" alt="MUX" />
+	</a>
+	<a href="./LICENSE">
+		<img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="MIT License" />
+	</a>
+</div>
 
-**Live demo:** [https://simply-learn-xano.vercel.app/](https://simply-learn-xano.vercel.app/) 
-**API (Swagger):** [https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk](https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk) 
-**Backend:** [Xano](https://www.xano.com/)
+<!-- Links: each on its own line, centered -->
+<div style="text-align:center;margin-top:8px;line-height:1.6;">
+	<div><a href="https://simply-learn-xano.vercel.app/" target="_blank" rel="noreferrer">Live demo</a></div>
+	<div><a href="https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk" target="_blank" rel="noreferrer">API (Swagger)</a></div>
+	<div><a href="https://www.xano.com/" target="_blank" rel="noreferrer">Xano Backend</a></div>
+</div>
 
 ---
 
