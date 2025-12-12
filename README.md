@@ -1,4 +1,3 @@
-
 <p align="center">
 	<img src="public/logo-white.svg" alt="Simply Learn" width="320" />
 </p>
@@ -15,7 +14,9 @@
 
 ## What is Simply Learn?
 
-A full-stack learning platform where **students** browse courses, watch video lessons, and chat with an AI tutor. **Teachers** create courses and upload videos. The entire backend — database, auth, business logic, external integrations — runs on **[Xano](https://www.xano.com/)**. No separate Node.js/Python server needed.
+This Next.js (secure) and **[Xano](https://www.xano.com/)** Powered Application is your ultimate Learning and Skill Improving Platform. You can create content and distribute content as well as consume other people's helpful content. Track and Level Up.
+
+The entire backend — database, auth, business logic, external integrations — runs on **Xano**. No separate Node.js/Python server needed.
 
 📚 **[API Documentation (Swagger)](https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk)**
 
