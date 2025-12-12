@@ -65,8 +65,8 @@ export function Header() {
             <div className="flex-1" />
           )}
 
-          {/* Right Side - Login & Start Free */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Right Side - Login & Start Free (anchored to right edge) */}
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2 pointer-events-auto">
             {isLoading ? (
               <div className="w-8 h-8 rounded-full glass animate-pulse" />
             ) : isAuthenticated ? (
