@@ -1,3 +1,5 @@
+![Simply-Learn](https://socialify.git.ci/ARYPROGRAMMER/Simply-Learn/image?description=1&font=KoHo&forks=1&language=1&name=1&owner=1&pattern=Circuit+Board&stargazers=1&theme=Dark)
+
 <p align="center">
 	<img src="public/logo-white.svg" alt="Simply Learn" width="320" />
 </p>
