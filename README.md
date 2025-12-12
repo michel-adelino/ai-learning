@@ -1,7 +1,9 @@
 
-# Simply Learn
+<p align="center">
+	<img src="public/logo-white.svg" alt="Simply Learn" width="320" />
+</p>
 
-**AI-First Learning Management System powered by Xano**
+<div align="center"><b>AI-First Learning Management System powered by Xano</b></div>
 
 [![Xano Backend](https://img.shields.io/badge/Xano-Backend%20%26%20Database-00DC82?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMOSAyMUwxOSAxNVY1TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==)](https://www.xano.com/)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
@@ -21,13 +23,13 @@ A full-stack learning platform where **students** browse courses, watch video le
 
 ## Why Xano?
 
-| Capability | How Xano Powers It |
-|------------|-------------------|
-| **Database** | PostgreSQL tables for users, courses, modules, lessons, progress |
-| **Auth** | Built-in JWT authentication with role-based access |
-| **API Builder** | Visual no-code endpoints with XanoScript logic |
-| **MUX Integration** | External API calls for video upload & signed playback |
-| **Scalability** | Production-ready infrastructure, zero DevOps |
+| Capability          | How Xano Powers It                                               |
+| ------------------- | ---------------------------------------------------------------- |
+| **Database**        | PostgreSQL tables for users, courses, modules, lessons, progress |
+| **Auth**            | Built-in JWT authentication with role-based access               |
+| **API Builder**     | Visual no-code endpoints with XanoScript logic                   |
+| **MUX Integration** | External API calls for video upload & signed playback            |
+| **Scalability**     | Production-ready infrastructure, zero DevOps                     |
 
 Xano replaced what would typically be an entire backend codebase. All API logic lives in [Xano's visual builder](https://www.xano.com/).
 
@@ -35,12 +37,12 @@ Xano replaced what would typically be an entire backend codebase. All API logic 
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Backend & Database** | [Xano](https://www.xano.com/) |
-| **Frontend** | Next.js 16, React 19, Tailwind CSS 4 |
-| **AI** | Google Gemini 2.5 Flash |
-| **Video** | MUX (streaming + direct uploads) |
+| Layer                  | Technology                           |
+| ---------------------- | ------------------------------------ |
+| **Backend & Database** | [Xano](https://www.xano.com/)        |
+| **Frontend**           | Next.js 16, React 19, Tailwind CSS 4 |
+| **AI**                 | Google Gemini 2.5 Flash              |
+| **Video**              | MUX (streaming + direct uploads)     |
 
 ---
 
@@ -65,14 +67,14 @@ GOOGLE_GENERATIVE_AI_API_KEY=your-gemini-key
 
 ## Database Schema (Xano)
 
-| Table | Fields |
-|-------|--------|
-| `users` | id, email, password, first_name, last_name, tier, role, avatar_url |
-| `categories` | id, title, slug |
-| `courses` | id, title, slug, description, image_url, tier, teacher, featured |
-| `modules` | id, title, course, order_index |
-| `lessons` | id, title, slug, content, module, mux_playback_id, duration |
-| `user_progress` | id, user, lesson, completed, completed_at |
+| Table           | Fields                                                             |
+| --------------- | ------------------------------------------------------------------ |
+| `users`         | id, email, password, first_name, last_name, tier, role, avatar_url |
+| `categories`    | id, title, slug                                                    |
+| `courses`       | id, title, slug, description, image_url, tier, teacher, featured   |
+| `modules`       | id, title, course, order_index                                     |
+| `lessons`       | id, title, slug, content, module, mux_playback_id, duration        |
+| `user_progress` | id, user, lesson, completed, completed_at                          |
 
 ---
 
@@ -80,18 +82,18 @@ GOOGLE_GENERATIVE_AI_API_KEY=your-gemini-key
 
 📚 **Full Documentation:** [Swagger](https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk)
 
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/auth/signup` | POST | No | Register |
-| `/auth/login` | POST | No | Login |
-| `/auth/me` | GET | Yes | Current user |
-| `/courses` | GET | No | List courses |
-| `/courses/{slug}` | GET | No | Course details |
-| `/lessons/{slug}` | GET | No | Lesson details |
-| `/progress/complete-lesson` | POST | Yes | Mark complete |
-| `/mux/signed-tokens` | POST | Yes | Video playback tokens |
-| `/teacher/courses` | POST | Teacher | Create course |
-| `/teacher/lessons` | POST | Teacher | Create lesson |
+| Endpoint                    | Method | Auth    | Description           |
+| --------------------------- | ------ | ------- | --------------------- |
+| `/auth/signup`              | POST   | No      | Register              |
+| `/auth/login`               | POST   | No      | Login                 |
+| `/auth/me`                  | GET    | Yes     | Current user          |
+| `/courses`                  | GET    | No      | List courses          |
+| `/courses/{slug}`           | GET    | No      | Course details        |
+| `/lessons/{slug}`           | GET    | No      | Lesson details        |
+| `/progress/complete-lesson` | POST   | Yes     | Mark complete         |
+| `/mux/signed-tokens`        | POST   | Yes     | Video playback tokens |
+| `/teacher/courses`          | POST   | Teacher | Create course         |
+| `/teacher/lessons`          | POST   | Teacher | Create lesson         |
 
 See [`xanoscript/`](./xanoscript/) for endpoint implementations.
 
@@ -136,4 +138,4 @@ MIT License © 2025 [Arya Pratap Singh](https://github.com/ARYPROGRAMMER)
 
 ---
 
-**Built with [Xano](https://www.xano.com/) • [Next.js](https://nextjs.org/) • [Gemini](https://ai.google.dev/) • [MUX](https://www.mux.com/)**
+**Built with Love and Speed, Thanks to [Xano](https://www.xano.com/)**
