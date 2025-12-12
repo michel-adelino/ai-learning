@@ -9,20 +9,10 @@ import { LayoutDashboard, BookOpen, Menu, GraduationCap, Sparkles } from "lucide
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/xano/auth-context"
 import { UserButton } from "@/components/auth"
-import { useEffect, useState } from "react"
 
 export function Header() {
   const pathname = usePathname()
   const { user, isAuthenticated, isLoading } = useAuth()
-  const [isScrolled, setIsScrolled] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
 
   const isTeacher = user?.role === "teacher"
 
@@ -36,13 +26,10 @@ export function Header() {
     <header
       className="fixed top-5 left-0 right-0 z-50 flex justify-center px-6 pointer-events-none"
     >
-      <div 
-        className={cn(
-          "glass-navbar rounded-full px-6 py-2.5 pointer-events-auto transition-[max-width] duration-500 ease-out",
-          isScrolled ? "w-full max-w-[460px]" : "w-full max-w-[1200px]",
-        )}
+      <div
+        className="glass-navbar rounded-full px-6 py-2.5 pointer-events-auto w-full max-w-[1200px] relative"
       >
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-full relative">
           {/* Logo - Left Side */}
           <Link href="/" className="flex items-center group flex-shrink-0">
             <Image
@@ -57,7 +44,7 @@ export function Header() {
 
           {/* Navigation Links - Center (only for authenticated users) */}
           {isAuthenticated ? (
-            <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
+            <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-1 pointer-events-auto">
               {loggedInLinks.map((link) => (
                 <Link
                   key={link.href}

@@ -47,29 +47,29 @@ const features = [
 ]
 
 const statsData = [
-  { value: "10+", label: "Courses" },
-  { value: "50+", label: "Lessons" },
-  { value: "10k+", label: "Students" },
+  { value: "X+", label: "Courses" },
+  { value: "Y+", label: "Lessons" },
+  { value: "Z+", label: "Students" },
 ]
 
 const testimonials = [
   {
-    quote: "This platform transformed my career. The structured approach made complex topics easy to understand.",
-    author: "Sarah Chen",
-    role: "Marketing Director",
-    avatar: "SC",
+    quote: "ABC testimonial quote here.",
+    author: "John Doe",
+    role: "Software Engineer",
+    avatar: "JD",
   },
   {
-    quote: "The hands-on projects made learning actually enjoyable. Best investment I've made in myself.",
-    author: "Marcus Johnson",
+    quote: "DEF testimonial quote here.",
+    author: "Jane Smith",
     role: "Product Manager",
-    avatar: "MJ",
+    avatar: "JS",
   },
   {
-    quote: "Finally found a platform that teaches real-world skills. The AI tutor feature is incredible.",
-    author: "Emily Rodriguez",
+    quote: "GHI testimonial quote here.",
+    author: "Bob Johnson",
     role: "UX Designer",
-    avatar: "ER",
+    avatar: "BJ",
   },
 ]
 
