@@ -99,6 +99,30 @@ export default async function Home() {
 
       <Header />
 
+      {/* Xano / Demo banner (spaced below fixed header to avoid overlap) */}
+      <div className="mt-20 sm:mt-24 flex justify-center z-40">
+        <div className="glass-navbar inline-flex items-center gap-3 px-4 py-1 rounded-full text-sm">
+          <a
+            href="https://www.xano.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-foreground font-medium hover:underline"
+          >
+            Xano Backend
+          </a>
+          <span className="text-white/30">•</span>
+          <a
+            href="https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk"
+            target="_blank"
+            rel="noreferrer"
+        className="text-emerald-400 font-medium hover:underline"
+          >
+            API (Swagger)
+          </a>
+       
+        </div>
+      </div>
+
       <main className="relative z-10">
         <section className="px-6 lg:px-12 pt-32 pb-20 max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">

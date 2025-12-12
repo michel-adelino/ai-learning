@@ -6,11 +6,15 @@
 
 <div align="center"><b>AI-First Learning Management System powered by Xano</b></div>
 
+
 [![Xano Backend](https://img.shields.io/badge/Xano-Backend%20%26%20Database-00DC82?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMOSAyMUwxOSAxNVY1TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==)](https://www.xano.com/)
+[![Live DEMO](https://img.shields.io/badge/Test%20the%20App-Live%20Demo-2563EB?style=for-the-badge&logo=vercel)](https://simply-learn-xano.vercel.app/)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Gemini AI](https://img.shields.io/badge/Gemini-2.5%20Flash-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
 [![MUX Video](https://img.shields.io/badge/MUX-Video-FF5A5F?style=for-the-badge)](https://www.mux.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
+
+**Live demo:** [https://simply-learn-xano.vercel.app/](https://simply-learn-xano.vercel.app/) • **API (Swagger):** [https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk](https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk) • **Backend:** [Xano](https://www.xano.com/)
 
 ---
 
