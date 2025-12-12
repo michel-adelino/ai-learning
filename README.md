@@ -14,7 +14,9 @@
 [![MUX Video](https://img.shields.io/badge/MUX-Video-FF5A5F?style=for-the-badge)](https://www.mux.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
 
-**Live demo:** [https://simply-learn-xano.vercel.app/](https://simply-learn-xano.vercel.app/) • **API (Swagger):** [https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk](https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk) • **Backend:** [Xano](https://www.xano.com/)
+**Live demo:** [https://simply-learn-xano.vercel.app/](https://simply-learn-xano.vercel.app/) 
+**API (Swagger):** [https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk](https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk) 
+**Backend:** [Xano](https://www.xano.com/)
 
 ---
 
