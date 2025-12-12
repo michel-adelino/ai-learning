@@ -5,27 +5,14 @@ query courses/{slug} verb=GET {
   }
 
   stack {
-    // Get course by slug with category
-    db.query courses {
-      where = $db.courses.slug == $input.slug
-      join = {
-        categories: {
-          table: "categories"
-          where: $db.courses.category == $db.categories.id
-        }
-      }
-      eval = {
-        category: {
-          id: $db.categories.id,
-          title: $db.categories.title,
-          slug: $db.categories.slug
-        }
-      }
-      return = {type: "single"}
+    // Get course by slug
+    db.get courses {
+      field_name = "slug"
+      field_value = $input.slug
     } as $course
 
     precondition ($course != null) {
-      error_type = "not_found"
+      error_type = "inputerror"
       error = "Course not found."
     }
 
@@ -33,10 +20,9 @@ query courses/{slug} verb=GET {
     db.query modules {
       where = $db.modules.course == $course.id
       sort = {modules.order_index: "asc"}
-      return = {type: "list"}
     } as $modules
 
-    // Get all lessons for all modules in one query
+    // Get all lessons for all modules
     db.query lessons {
       join = {
         modules: {
@@ -46,21 +32,19 @@ query courses/{slug} verb=GET {
       }
       where = $db.modules.course == $course.id
       sort = {lessons.order_index: "asc"}
-      output = ["id", "title", "slug", "description", "duration", "order_index", "module"]
-      return = {type: "list"}
     } as $allLessons
   }
 
   response = {
-    id: $course.id,
-    title: $course.title,
-    slug: $course.slug,
-    description: $course.description,
-    image_url: $course.image_url,
-    tier: $course.tier,
-    featured: $course.featured,
-    category: $course.category,
-    modules: $modules,
+    id: $course.id
+    title: $course.title
+    slug: $course.slug
+    description: $course.description
+    image_url: $course.image_url
+    tier: $course.tier
+    featured: $course.featured
+    category: $course.category
+    modules: $modules
     lessons: $allLessons
   }
 

@@ -1,5 +1,7 @@
 # Simply Learn - AI-Powered Learning Management System
 
+![Simply Learn](public/logo-black.svg)
+
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
 [![Xano](https://img.shields.io/badge/Xano-Backend-00DC82)](https://www.xano.com/)
@@ -28,7 +30,7 @@ A modern Learning Management System with role-based access (students & teachers)
 
 ### Security
 - 🔐 **JWT Authentication** - Secure login/signup with Xano
-- 🛡️ **Role-Based Access** - Student, Teacher, Admin roles
+- 🛡️ **Role-Based Access** - Student, Teacher roles
 - 🚧 **Route Protection** - Middleware-based auth guards
 
 ---
@@ -41,7 +43,7 @@ A modern Learning Management System with role-based access (students & teachers)
 | **React 19** | UI library |
 | **Xano** | Backend-as-a-Service (database, auth, API) |
 | **MUX** | Video hosting, streaming & direct uploads |
-| **Google Gemini** | AI tutor (`gemini-2.0-flash`) |
+| **Google Gemini** | AI tutor (`gemini-2.5-flash`) |
 | **Tailwind CSS 4** | Styling |
 
 ---
@@ -103,7 +105,7 @@ Create these tables in Xano:
 | first_name | Text | |
 | last_name | Text | |
 | tier | Enum | `free` / `pro` / `ultra` (default: free) |
-| role | Enum | `student` / `teacher` / `admin` (default: student) |
+| role | Enum | `student` / `teacher` (default: student) |
 | avatar_url | Text | Optional |
 | created_at | Timestamp | |
 
@@ -263,7 +265,6 @@ MUX_SIGNING_KEY=your-signing-key (optional)
 |------|--------------|
 | **Student** | Browse courses, watch lessons, track progress, use AI tutor (Ultra) |
 | **Teacher** | All student capabilities + create courses, upload videos |
-| **Admin** | All capabilities + manage all content |
 
 ---
 

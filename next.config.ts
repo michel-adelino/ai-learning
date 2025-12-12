@@ -13,6 +13,22 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.xano.io", // Xano uploaded files/images
       },
+      {
+        protocol: "https",
+        hostname: "**.gstatic.com", // Google images
+      },
+      {
+        protocol: "https",
+        hostname: "**.googleusercontent.com", // Google user content
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com", // Unsplash
+      },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com", // Placeholder images
+      },
     ],
   },
 };

@@ -68,4 +68,3 @@ query mux/signed-tokens verb=POST {
 
   tags = ["mux", "video"]
 }
-

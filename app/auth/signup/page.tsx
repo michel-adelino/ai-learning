@@ -1,72 +1,81 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Code2, ArrowLeft } from "lucide-react";
-import { AuthForm } from "@/components/auth";
+import Link from "next/link"
+import Image from "next/image"
+import { ArrowLeft, Sparkles } from "lucide-react"
+import { AuthForm } from "@/components/auth"
+import { motion } from "framer-motion"
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen bg-[#09090b] text-white flex items-center justify-center p-6">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 sm:p-6">
       {/* Background effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-violet-600/25 rounded-full blur-[150px] animate-pulse" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-20" />
+        <div className="absolute top-[10%] right-[10%] w-[400px] h-[400px] bg-emerald-500/[0.03] rounded-full blur-[120px] animate-pulse-glow" />
         <div
-          className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-fuchsia-600/20 rounded-full blur-[120px] animate-pulse"
+          className="absolute bottom-[10%] left-[5%] w-[300px] h-[300px] bg-emerald-400/[0.02] rounded-full blur-[100px] animate-pulse-glow"
           style={{ animationDelay: "1s" }}
-        />
-        <div
-          className="absolute top-[30%] right-[15%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px] animate-float"
-          style={{ animationDelay: "0.5s" }}
         />
       </div>
 
-      <div className="relative w-full max-w-md animate-fade-in-up">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative w-full max-w-md z-10"
+      >
         {/* Back to home */}
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors"
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors group"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to home
         </Link>
 
         {/* Logo */}
-        <div className="text-center mb-10">
-          <Link href="/" className="inline-flex items-center gap-2.5 group">
-            <div className="relative">
-              <div className="absolute inset-0 bg-linear-to-r from-violet-600 to-fuchsia-600 rounded-xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative bg-linear-to-r from-violet-600 to-fuchsia-600 p-2.5 rounded-xl shadow-lg shadow-violet-500/25">
-                <Code2 className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <span className="text-2xl font-bold text-gradient">
-              Simply Learn
-            </span>
+        <div className="text-center mb-6">
+          <Link href="/" className="inline-flex items-center justify-center">
+            <Image src="/logo-white.svg" alt="Simply Learn" width={140} height={24} className="h-6 w-auto" />
           </Link>
         </div>
 
-        {/* Card */}
-        <div className="glass border border-white/10 rounded-3xl p-8 shadow-2xl shadow-black/20">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-black mb-2">Create your account</h1>
-            <p className="text-zinc-400">
-              Start your coding journey today
-            </p>
-          </div>
+        {/* Card - Compact, no scroll */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="relative glass-card rounded-2xl p-6 overflow-hidden"
+        >
+          {/* Subtle shine effect */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
 
-          <AuthForm mode="signup" redirectTo="/dashboard" />
+          <div className="relative">
+            <div className="text-center mb-5">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-subtle mb-3 text-xs text-emerald-400 font-medium">
+                <Sparkles className="w-3 h-3" />
+                Start for free
+              </div>
+              <h1 className="text-xl font-bold mb-1 text-gradient">Create your account</h1>
+              <p className="text-muted-foreground text-sm">Start your learning journey today</p>
+            </div>
 
-          <div className="mt-8 text-center text-sm">
-            <span className="text-zinc-400">Already have an account?</span>{" "}
-            <Link
-              href="/auth/login"
-              className="text-violet-400 hover:text-violet-300 font-semibold transition-colors"
-            >
-              Sign in
-            </Link>
+            <AuthForm mode="signup" redirectTo="/dashboard" />
+
+            <div className="mt-5 text-center text-sm">
+              <span className="text-muted-foreground">Already have an account?</span>{" "}
+              <Link
+                href="/auth/login"
+                className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+              >
+                Sign in
+              </Link>
+            </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
-  );
+  )
 }

@@ -1,169 +1,141 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Code2,
-  Play,
-  LayoutDashboard,
-  BookOpen,
-  Sparkles,
-  Menu,
-  GraduationCap,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/lib/xano/auth-context";
-import { UserButton } from "@/components/auth";
-
-const loggedOutLinks = [
-  { href: "#courses", label: "Courses" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "#testimonials", label: "Reviews" },
-];
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { LayoutDashboard, BookOpen, Menu, GraduationCap, Sparkles } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useAuth } from "@/lib/xano/auth-context"
+import { UserButton } from "@/components/auth"
+import { useEffect, useState } from "react"
 
 export function Header() {
-  const pathname = usePathname();
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const pathname = usePathname()
+  const { user, isAuthenticated, isLoading } = useAuth()
+  const [isScrolled, setIsScrolled] = useState(false)
 
-  const isUltra = user?.tier === "ultra";
-  const isTeacher = user?.role === "teacher" || user?.role === "admin";
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  const isTeacher = user?.role === "teacher"
 
   const loggedInLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/dashboard/courses", label: "My Courses", icon: BookOpen },
-    // Teacher dashboard link
-    ...(isTeacher
-      ? [{ href: "/teacher", label: "Teach", icon: GraduationCap }]
-      : []),
-    // Show "Account" for Ultra users, "Upgrade" for others
-    ...(isUltra
-      ? [{ href: "/pricing", label: "Account", icon: Sparkles }]
-      : [{ href: "/pricing", label: "Upgrade", icon: Sparkles }]),
-  ];
+    { href: "/dashboard/courses", label: "Courses", icon: BookOpen },
+    ...(isTeacher ? [{ href: "/teacher", label: "Teach", icon: GraduationCap }] : []),
+  ]
 
   return (
-    <header className="sticky top-0 z-50 glass border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative">
-              <div className="absolute inset-0 bg-linear-to-r from-violet-600 to-fuchsia-600 rounded-xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative bg-linear-to-r from-violet-600 to-fuchsia-600 p-2.5 rounded-xl shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/40 transition-shadow">
-                <Code2 className="w-5 h-5 text-white" />
-              </div>
-            </div>
-            <span className="text-xl font-bold text-gradient hidden sm:block">
-              Simply Learn
-            </span>
+    <header
+      className="fixed top-5 left-0 right-0 z-50 flex justify-center px-6 pointer-events-none"
+    >
+      <div 
+        className={cn(
+          "glass-navbar rounded-full px-6 py-2.5 pointer-events-auto transition-[max-width] duration-500 ease-out",
+          isScrolled ? "w-full max-w-[460px]" : "w-full max-w-[1200px]",
+        )}
+      >
+        <div className="flex items-center w-full">
+          {/* Logo - Left Side */}
+          <Link href="/" className="flex items-center group flex-shrink-0">
+            <Image
+              src="/logo-white.svg"
+              alt="Simply Learn"
+              width={100}
+              height={18}
+              className="h-5 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
+              priority
+            />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 bg-zinc-900/50 px-2 py-1.5 rounded-2xl border border-zinc-800/50">
-            {!isAuthenticated
-              ? loggedOutLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300",
-                      pathname === link.href
-                        ? "text-white bg-linear-to-r from-violet-600/80 to-fuchsia-600/80 shadow-lg shadow-violet-500/20"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/60"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))
-              : loggedInLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300",
-                      pathname === link.href
-                        ? "text-white bg-linear-to-r from-violet-600/80 to-fuchsia-600/80 shadow-lg shadow-violet-500/20"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/60"
-                    )}
-                  >
-                    <link.icon className="w-4 h-4" />
-                    {link.label}
-                  </Link>
-                ))}
-          </nav>
-
-          {/* Right Side */}
-          <div className="flex items-center gap-3">
-            {/* CTA or User Button */}
-            {isLoading ? (
-              <div className="w-9 h-9 rounded-full bg-zinc-800 animate-pulse" />
-            ) : (
-              <UserButton />
-            )}
-
-            {/* Mobile Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild className="md:hidden">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-zinc-400 hover:text-white"
+          {/* Navigation Links - Center (only for authenticated users) */}
+          {isAuthenticated ? (
+            <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
+              {loggedInLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-300",
+                    pathname === link.href
+                      ? "text-foreground bg-white/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+                  )}
                 >
-                  <Menu className="w-5 h-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-56 bg-zinc-900 border-zinc-800"
-              >
-                {!isAuthenticated
-                  ? loggedOutLinks.map((link) => (
+                  <link.icon className="w-3.5 h-3.5" />
+                  <span>{link.label}</span>
+                </Link>
+              ))}
+            </nav>
+          ) : (
+            <div className="flex-1" />
+          )}
+
+          {/* Right Side - Login & Start Free */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {isLoading ? (
+              <div className="w-8 h-8 rounded-full glass animate-pulse" />
+            ) : isAuthenticated ? (
+              <>
+                <UserButton />
+                {/* Mobile Menu */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild className="md:hidden">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-foreground hover:bg-white/5 h-8 w-8 rounded-full"
+                    >
+                      <Menu className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48 glass-heavy rounded-xl border-white/10 mt-2">
+                    {loggedInLinks.map((link) => (
                       <DropdownMenuItem key={link.href} asChild>
                         <Link
                           href={link.href}
-                          className="flex items-center gap-2 text-zinc-300"
-                        >
-                          {link.label}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))
-                  : loggedInLinks.map((link) => (
-                      <DropdownMenuItem key={link.href} asChild>
-                        <Link
-                          href={link.href}
-                          className="flex items-center gap-2 text-zinc-300"
+                          className="flex items-center gap-2.5 text-muted-foreground hover:text-foreground py-2"
                         >
                           <link.icon className="w-4 h-4" />
                           {link.label}
                         </Link>
                       </DropdownMenuItem>
                     ))}
-
-                {!isAuthenticated && (
-                  <>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href="/auth/login"
-                        className="flex items-center gap-2 text-zinc-300"
-                      >
-                        <Play className="w-4 h-4" />
-                        Sign In
-                      </Link>
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <>
+                <Link href="/auth/login">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-foreground hover:bg-white/5 font-medium h-8 rounded-full text-sm px-4"
+                  >
+                    Log in
+                  </Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button
+                    size="sm"
+                    className="btn-shiny bg-foreground text-background hover:bg-foreground/90 font-medium h-8 rounded-full text-sm px-4"
+                  >
+                    <Sparkles className="w-3 h-3 mr-1.5" />
+                    Start Free
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
     </header>
-  );
+  )
 }

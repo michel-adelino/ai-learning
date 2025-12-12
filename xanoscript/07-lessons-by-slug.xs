@@ -6,9 +6,9 @@ query lessons/{slug} verb=GET {
 
   stack {
     // Get lesson by slug
-    db.query lessons {
-      where = $db.lessons.slug == $input.slug
-      return = {type: "single"}
+    db.get lessons {
+      field_name = "slug"
+      field_value = $input.slug
     } as $lesson
 
     precondition ($lesson != null) {
@@ -23,28 +23,15 @@ query lessons/{slug} verb=GET {
     } as $module
 
     // Get the course this module belongs to
-    db.query courses {
-      where = $db.courses.id == $module.course
-      join = {
-        categories: {
-          table: "categories"
-          where: $db.courses.category == $db.categories.id
-        }
-      }
-      eval = {
-        category: {
-          id: $db.categories.id,
-          title: $db.categories.title
-        }
-      }
-      return = {type: "single"}
+    db.get courses {
+      field_name = "id"
+      field_value = $module.course
     } as $course
 
     // Get all modules for the course
     db.query modules {
       where = $db.modules.course == $course.id
       sort = {modules.order_index: "asc"}
-      return = {type: "list"}
     } as $allModules
 
     // Get all lessons for the course (for sidebar navigation)
@@ -58,7 +45,6 @@ query lessons/{slug} verb=GET {
       where = $db.modules.course == $course.id
       sort = {lessons.order_index: "asc"}
       output = ["id", "title", "slug", "duration", "order_index", "module"]
-      return = {type: "list"}
     } as $allLessons
   }
 

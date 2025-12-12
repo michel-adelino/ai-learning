@@ -1,8 +1,21 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { GoogleGenAI } from "@google/genai";
 
 const XANO_API_URL = process.env.NEXT_PUBLIC_XANO_API_URL || "";
 const AUTH_TOKEN_COOKIE = "xano_auth_token";
+
+const genAI = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || "" });
+
+const SYSTEM_PROMPT = `You are an expert AI learning assistant for an online education platform. Your role is to:
+
+1. Help students understand course concepts and topics
+2. Answer questions about programming, web development, and technology
+3. Provide clear, concise explanations with code examples when helpful
+4. Encourage learning and guide students to discover answers themselves
+5. Be friendly, supportive, and patient
+
+Keep responses focused and educational. Use markdown formatting for code blocks and lists.`;
 
 export async function POST(request: Request) {
   const cookieStore = await cookies();
@@ -32,31 +45,35 @@ export async function POST(request: Request) {
 
     const { messages } = await request.json();
 
-    // Call Xano AI chat endpoint
-    const aiResponse = await fetch(`${XANO_API_URL}/ai/chat`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
+    // Format messages for Gemini
+    const formattedMessages = messages.map((msg: { role: string; content: string }) => ({
+      role: msg.role === "assistant" ? "model" : "user",
+      parts: [{ text: msg.content }],
+    }));
+
+    // Call Gemini 2.5 Flash
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: formattedMessages,
+      config: {
+        systemInstruction: SYSTEM_PROMPT,
+        maxOutputTokens: 2048,
+        temperature: 0.7,
       },
-      body: JSON.stringify({ messages }),
     });
 
-    if (!aiResponse.ok) {
-      const error = await aiResponse.text();
-      return new NextResponse(error, { status: aiResponse.status });
-    }
-
-    const data = await aiResponse.json();
+    const text = response.text || "I'm sorry, I couldn't generate a response.";
 
     // Return response in format expected by the UI
     return NextResponse.json({
       role: "assistant",
-      content: data.message,
-      sources: data.sources || [],
+      content: text,
     });
   } catch (error) {
     console.error("Chat error:", error);
-    return new NextResponse("Internal server error", { status: 500 });
+    return new NextResponse(
+      error instanceof Error ? error.message : "Internal server error",
+      { status: 500 }
+    );
   }
 }

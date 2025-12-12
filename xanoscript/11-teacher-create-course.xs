@@ -1,7 +1,9 @@
 // Teacher Create Course - Create a new course (teachers only)
 // NOTE: Enable "Requires Authentication" in Xano endpoint settings (select "users" table)
+// NOTE: Frontend must always send tier value (default to "free" on frontend)
 query "teacher/courses" verb=POST {
   api_group = "all endpoints"
+  auth = "users"
 
   input {
     text title filters=trim
@@ -9,22 +11,10 @@ query "teacher/courses" verb=POST {
     text description filters=trim
     text image_url?
     int category?
-    text tier?  // "free", "pro", "ultra" - defaults to "free"
+    text tier filters=trim
   }
 
   stack {
-    // Get the authenticated user
-    db.get users {
-      field_name = "id"
-      field_value = $auth.id
-    } as $user
-
-    // Check if user is a teacher
-    precondition ($user.role == "teacher" || $user.role == "admin") {
-      error_type = "accessdenied"
-      error = "Only teachers can create courses."
-    }
-
     // Check if slug is unique
     db.get courses {
       field_name = "slug"
@@ -45,9 +35,11 @@ query "teacher/courses" verb=POST {
         description: $input.description
         image_url: $input.image_url
         category: $input.category
-        tier: $input.tier ?? "free"
+        tier: $input.tier
         featured: false
         teacher: $auth.id
+        module_count: 0
+        lesson_count: 0
       }
     } as $course
   }
@@ -63,6 +55,8 @@ query "teacher/courses" verb=POST {
     featured: $course.featured
     teacher: $course.teacher
     created_at: $course.created_at
+    module_count: 0
+    lesson_count: 0
   }
 
   tags = ["teacher", "courses"]

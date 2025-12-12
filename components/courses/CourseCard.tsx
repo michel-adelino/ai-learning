@@ -1,25 +1,26 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
-import { Lock, Play, Layers, CheckCircle2, Clock } from "lucide-react";
-import { TIER_STYLES } from "@/lib/constants";
-import { Progress } from "@/components/ui/progress";
-import type { Tier } from "@/lib/xano/types";
+import Image from "next/image"
+import Link from "next/link"
+import { Lock, Play, Layers, CheckCircle2, Clock } from "lucide-react"
+import { TIER_STYLES } from "@/lib/constants"
+import type { Tier } from "@/lib/xano/types"
+import { motion } from "framer-motion"
 
 export interface CourseCardProps {
-  title?: string | null;
-  description?: string | null;
-  tier?: Tier | null;
-  image_url?: string | null;
-  moduleCount?: number | null;
-  lessonCount?: number | null;
-  slug?: string | { current: string } | null;
-  href?: string;
-  completedLessonCount?: number | null;
-  isCompleted?: boolean;
-  isLocked?: boolean;
-  showProgress?: boolean;
+  title?: string | null
+  description?: string | null
+  tier?: Tier | null
+  image_url?: string | null
+  moduleCount?: number | null
+  lessonCount?: number | null
+  slug?: string | { current: string } | null
+  href?: string
+  completedLessonCount?: number | null
+  isCompleted?: boolean
+  isLocked?: boolean
+  showProgress?: boolean
+  index?: number
 }
 
 export function CourseCard({
@@ -35,113 +36,145 @@ export function CourseCard({
   isCompleted = false,
   isLocked = false,
   showProgress = false,
+  index = 0,
 }: CourseCardProps) {
-  const displayTier = tier ?? "free";
-  const styles = TIER_STYLES[displayTier];
-  const totalLessons = lessonCount ?? 0;
-  const completed = completedLessonCount ?? 0;
-  const progressPercent =
-    totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
+  const displayTier = tier ?? "free"
+  const styles = TIER_STYLES[displayTier]
+  const totalLessons = lessonCount ?? 0
+  const completed = completedLessonCount ?? 0
+  const progressPercent = totalLessons > 0 ? (completed / totalLessons) * 100 : 0
 
   // Handle slug as either string or object
-  const slugValue = typeof slug === "string" ? slug : slug?.current ?? "";
-  const linkHref = href ?? `/courses/${slugValue}`;
-  const imageUrl = image_url ?? null;
+  const slugValue = typeof slug === "string" ? slug : (slug?.current ?? "")
+  const linkHref = href ?? `/courses/${slugValue}`
+  const imageUrl = image_url ?? null
 
   return (
-    <Link href={linkHref} className="group block">
-      <div className="relative rounded-2xl glass border border-white/5 overflow-hidden card-hover">
-        {/* Gradient glow on hover */}
-        <div className="absolute inset-0 bg-linear-to-br from-violet-500/0 via-transparent to-fuchsia-500/0 group-hover:from-violet-500/10 group-hover:to-fuchsia-500/10 transition-all duration-500 pointer-events-none" />
-        
-        {/* Course thumbnail/header */}
-        <div
-          className={`h-40 bg-linear-to-br ${styles.gradient} flex items-center justify-center relative overflow-hidden`}
-        >
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={title ?? "Course thumbnail"}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-          ) : (
-            <div className="text-6xl opacity-40 group-hover:scale-110 transition-transform duration-300">📚</div>
-          )}
-          <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
-
-          {/* Tier badge or Completed badge */}
-          {isCompleted ? (
-            <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/90 text-white shadow-lg shadow-emerald-500/30 backdrop-blur-sm">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              Completed
-            </div>
-          ) : (
-            <div
-              className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${styles.badge} backdrop-blur-sm shadow-lg`}
-            >
-              {displayTier}
-            </div>
-          )}
-
-          {/* Locked overlay */}
-          {isLocked && (
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-14 h-14 rounded-2xl glass flex items-center justify-center border border-white/10">
-                  <Lock className="w-6 h-6 text-zinc-300" />
-                </div>
-                <span className="text-sm text-zinc-300 font-medium">
-                  Upgrade to unlock
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Course content */}
-        <div className="p-5 relative">
-          <h3 className="text-lg font-bold mb-2 text-white group-hover:text-gradient transition-all duration-300 line-clamp-2">
-            {title ?? "Untitled Course"}
-          </h3>
-
-          {description && (
-            <p className="text-sm text-zinc-400 mb-4 line-clamp-2 leading-relaxed">
-              {description}
-            </p>
-          )}
-
-          <div className="flex items-center gap-4 text-sm text-zinc-500">
-            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-800/50">
-              <Layers className="w-3.5 h-3.5 text-violet-400" />
-              <span className="text-zinc-300">{moduleCount ?? 0}</span> modules
-            </span>
-            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-800/50">
-              <Play className="w-3.5 h-3.5 text-fuchsia-400" />
-              <span className="text-zinc-300">{lessonCount ?? 0}</span> lessons
-            </span>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.5,
+        delay: index * 0.1,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      whileHover={{ y: -8 }}
+      className="h-full"
+    >
+      <Link href={linkHref} className="group block h-full">
+        <div className="relative h-full rounded-3xl glass-card overflow-hidden transition-all duration-500 hover:border-white/15 card-hover">
+          {/* Subtle gradient border glow on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-white/10 via-transparent to-white/5" />
           </div>
 
-          {/* Progress bar */}
-          {showProgress && totalLessons > 0 && (
-            <div className="mt-4 pt-4 border-t border-white/5">
-              <div className="flex items-center justify-between text-sm mb-2.5">
-                <span className="text-zinc-400 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" />
-                  {completed}/{totalLessons} completed
-                </span>
-                <span className="text-violet-400 font-medium">
-                  {Math.round(progressPercent)}%
-                </span>
-              </div>
-              <Progress
-                value={progressPercent}
-                className="h-2.5 bg-zinc-800/70 rounded-full overflow-hidden [&>div]:bg-linear-to-r [&>div]:from-violet-500 [&>div]:to-fuchsia-500 [&>div]:rounded-full"
+          {/* Course thumbnail/header */}
+          <div
+            className={`h-48 bg-gradient-to-br ${styles.gradient} flex items-center justify-center relative overflow-hidden`}
+          >
+            {imageUrl ? (
+              <Image
+                src={imageUrl || "/placeholder.svg"}
+                alt={title ?? "Course thumbnail"}
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
               />
+            ) : (
+              <motion.div
+                className="text-6xl opacity-30"
+                whileHover={{ scale: 1.2, rotate: 5 }}
+                transition={{ duration: 0.3 }}
+              >
+                📚
+              </motion.div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+
+            {/* Tier badge or Completed badge */}
+            {isCompleted ? (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/90 text-white shadow-lg shadow-emerald-500/30 backdrop-blur-md"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Completed
+              </motion.div>
+            ) : (
+              <div
+                className={`absolute top-4 right-4 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${styles.badge} backdrop-blur-md shadow-lg glass-border`}
+              >
+                {displayTier}
+              </div>
+            )}
+
+            {/* Locked overlay */}
+            {isLocked && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute inset-0 glass-heavy flex items-center justify-center"
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <motion.div
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                    className="w-16 h-16 rounded-2xl glass flex items-center justify-center border border-white/10"
+                  >
+                    <Lock className="w-7 h-7 text-muted-foreground" />
+                  </motion.div>
+                  <span className="text-sm text-muted-foreground font-medium">Upgrade to unlock</span>
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Course content */}
+          <div className="p-6 relative">
+            <h3 className="text-lg font-bold mb-2.5 text-foreground group-hover:text-gradient transition-all duration-300 line-clamp-2">
+              {title ?? "Untitled Course"}
+            </h3>
+
+            {description && (
+              <p className="text-sm text-muted-foreground mb-5 line-clamp-2 leading-relaxed">{description}</p>
+            )}
+
+            <div className="flex items-center gap-3 text-sm">
+              <span className="flex items-center gap-2 px-3 py-2 rounded-xl glass border border-white/5">
+                <Layers className="w-4 h-4 text-muted-foreground" />
+                <span className="text-foreground font-medium">{moduleCount ?? 0}</span>
+                <span className="text-muted-foreground">modules</span>
+              </span>
+              <span className="flex items-center gap-2 px-3 py-2 rounded-xl glass border border-white/5">
+                <Play className="w-4 h-4 text-muted-foreground" />
+                <span className="text-foreground font-medium">{lessonCount ?? 0}</span>
+                <span className="text-muted-foreground">lessons</span>
+              </span>
             </div>
-          )}
+
+            {/* Progress bar */}
+            {showProgress && totalLessons > 0 && (
+              <div className="mt-5 pt-5 border-t border-white/5">
+                <div className="flex items-center justify-between text-sm mb-3">
+                  <span className="text-muted-foreground flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    {completed}/{totalLessons} completed
+                  </span>
+                  <span className="text-foreground font-semibold">{Math.round(progressPercent)}%</span>
+                </div>
+                <div className="relative h-2.5 glass rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progressPercent}%` }}
+                    transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-white/60 to-white/80 rounded-full"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </Link>
-  );
+      </Link>
+    </motion.div>
+  )
 }

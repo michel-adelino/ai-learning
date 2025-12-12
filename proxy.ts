@@ -8,7 +8,7 @@ const protectedRoutes = [
   "/lessons",
 ];
 
-// Routes only for teachers/admins
+// Routes only for teachers
 const teacherRoutes = [
   "/teacher",
 ];

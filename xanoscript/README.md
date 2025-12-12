@@ -24,6 +24,7 @@ This folder contains XanoScript files to create all required API endpoints for t
 | 08-progress-complete-lesson.xs | `/progress/complete-lesson` | POST | Yes | Mark lesson complete |
 | 09-search.xs | `/search` | GET | No | Search courses/lessons |
 | 10-mux-signed-tokens.xs | `/mux/signed-tokens` | POST | Yes | Get MUX video tokens |
+| 19-auth-upgrade-tier.xs | `/auth/upgrade-tier` | POST | Yes | Upgrade user tier |
 
 ## Setup Order
 

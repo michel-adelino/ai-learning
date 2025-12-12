@@ -59,7 +59,6 @@ export async function getMuxSignedTokens(
   }
 }
 
-// For admin: create upload URL
 export async function createMuxUploadUrl(): Promise<{
   uploadUrl: string | null;
   uploadId: string | null;
@@ -105,7 +104,6 @@ export async function createMuxUploadUrl(): Promise<{
   }
 }
 
-// For admin: check upload status
 export async function getMuxUploadStatus(uploadId: string): Promise<{
   status: "waiting" | "preparing" | "ready" | "errored" | null;
   playbackId: string | null;

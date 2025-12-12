@@ -61,7 +61,7 @@ export function LessonContentXano({ content }: LessonContentXanoProps) {
             <p className="text-zinc-300 leading-relaxed mb-4">{children}</p>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-violet-500 pl-4 my-4 italic text-zinc-400">
+            <blockquote className="border-l-4 border-zinc-500 pl-4 my-4 italic text-zinc-400">
               {children}
             </blockquote>
           ),
@@ -85,14 +85,14 @@ export function LessonContentXano({ content }: LessonContentXanoProps) {
             if (isBlock) {
               return (
                 <pre className="bg-zinc-800 rounded-lg p-4 overflow-x-auto">
-                  <code className="text-sm text-violet-300 font-mono">
+                  <code className="text-sm text-zinc-300 font-mono">
                     {children}
                   </code>
                 </pre>
               );
             }
             return (
-              <code className="bg-zinc-800 px-1.5 py-0.5 rounded text-sm text-violet-300 font-mono">
+              <code className="bg-zinc-800 px-1.5 py-0.5 rounded text-sm text-zinc-300 font-mono">
                 {children}
               </code>
             );
@@ -102,7 +102,7 @@ export function LessonContentXano({ content }: LessonContentXanoProps) {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-violet-400 hover:text-violet-300 underline underline-offset-2 transition-colors"
+              className="text-zinc-300 hover:text-white underline underline-offset-2 transition-colors"
             >
               {children}
             </a>

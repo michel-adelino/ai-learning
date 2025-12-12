@@ -1,40 +1,30 @@
-// Get Featured Courses - Returns featured courses for homepage
+// Get Featured Courses - Returns featured courses with modules and lessons
 query courses/featured verb=GET {
   input {}
 
   stack {
-    // Query featured courses with category join
+    // Query featured courses
     db.query courses {
       where = $db.courses.featured == true
-      join = {
-        categories: {
-          table: "categories"
-          where: $db.courses.category == $db.categories.id
-        }
-      }
-      eval = {
-        category: {
-          id: $db.categories.id,
-          title: $db.categories.title,
-          slug: $db.categories.slug
-        }
-      }
       sort = {courses.id: "desc"}
-      output = [
-        "id",
-        "title",
-        "slug",
-        "description",
-        "image_url",
-        "tier",
-        "featured",
-        "category"
-      ]
-      return = {type: "list"}
     } as $courses
+
+    // Get all modules
+    db.query modules {
+      sort = {modules.order_index: "asc"}
+    } as $allModules
+
+    // Get all lessons
+    db.query lessons {
+      sort = {lessons.order_index: "asc"}
+    } as $allLessons
   }
 
-  response = $courses
+  response = {
+    courses: $courses
+    modules: $allModules
+    lessons: $allLessons
+  }
 
   tags = ["courses"]
 }

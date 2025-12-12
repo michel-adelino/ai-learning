@@ -1,20 +1,12 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useState } from "react";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Sparkles,
-  Loader2,
-  Code2,
-  Rocket,
-  Crown,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Header } from "@/components/Header";
-import { useAuth } from "@/lib/xano/auth-context";
-import { TIER_FEATURES, getTierColorClasses } from "@/lib/constants";
+import Link from "next/link"
+import { useState } from "react"
+import { CheckCircle2, Sparkles, Loader2, Rocket, Crown, GraduationCap } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Header } from "@/components/Header"
+import { useAuth } from "@/lib/xano/auth-context"
+import { motion } from "framer-motion"
 
 const plans = [
   {
@@ -22,14 +14,10 @@ const plans = [
     price: "$0",
     period: "forever",
     tier: "free" as const,
-    icon: Code2,
+    icon: GraduationCap,
     description: "Perfect for getting started",
     color: "zinc",
-    features: [
-      "Access to free courses",
-      "Community support",
-      "Progress tracking",
-    ],
+    features: ["Access to free courses", "Community support", "Progress tracking"],
   },
   {
     name: "Pro",
@@ -38,14 +26,9 @@ const plans = [
     tier: "pro" as const,
     icon: Rocket,
     description: "For serious learners",
-    color: "violet",
+    color: "emerald",
     popular: true,
-    features: [
-      "Everything in Free",
-      "Access to Pro courses",
-      "Priority support",
-      "Downloadable resources",
-    ],
+    features: ["Everything in Free", "Access to Pro courses", "Priority support", "Downloadable resources"],
   },
   {
     name: "Ultra",
@@ -63,196 +46,192 @@ const plans = [
       "Early access to new courses",
     ],
   },
-];
+]
 
 export default function PricingPage() {
-  const { user, isAuthenticated, upgradeTier, isLoading: authLoading } = useAuth();
-  const [upgrading, setUpgrading] = useState<string | null>(null);
+  const { user, isAuthenticated, upgradeTier, isLoading: authLoading } = useAuth()
+  const [upgrading, setUpgrading] = useState<string | null>(null)
 
   const handleUpgrade = async (tier: "pro" | "ultra") => {
     if (!isAuthenticated) {
-      // Redirect to login/signup
-      window.location.href = "/auth/signup";
-      return;
+      window.location.href = "/auth/signup"
+      return
     }
 
-    setUpgrading(tier);
+    setUpgrading(tier)
     try {
-      await upgradeTier(tier);
-      // In production, this would redirect to a payment page
-      alert(`Upgraded to ${tier}! In production, this would process payment.`);
+      await upgradeTier(tier)
+      alert(`Upgraded to ${tier}! In production, this would process payment.`)
     } catch (error) {
-      console.error("Upgrade failed:", error);
-      alert("Failed to upgrade. Please try again.");
+      console.error("Upgrade failed:", error)
+      alert("Failed to upgrade. Please try again.")
     } finally {
-      setUpgrading(null);
+      setUpgrading(null)
     }
-  };
+  }
 
-  const currentTier = user?.tier || "free";
+  const currentTier = user?.tier || "free"
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white overflow-hidden">
-      {/* Animated gradient mesh background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-600/15 rounded-full blur-[120px] animate-pulse" />
+    <div className="min-h-screen bg-background text-foreground overflow-hidden">
+      {/* Background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+        <div className="absolute top-[-10%] left-[5%] w-[600px] h-[600px] bg-emerald-500/[0.03] rounded-full blur-[150px] animate-pulse-glow" />
         <div
-          className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-fuchsia-600/10 rounded-full blur-[100px] animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-        <div
-          className="absolute top-[40%] right-[20%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] animate-pulse"
-          style={{ animationDelay: "2s" }}
+          className="absolute bottom-[10%] right-[-5%] w-[500px] h-[500px] bg-amber-400/[0.02] rounded-full blur-[130px] animate-pulse-glow"
+          style={{ animationDelay: "1.5s" }}
         />
       </div>
 
-      {/* Noise texture overlay */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
-      {/* Navigation */}
       <Header />
 
-      {/* Main Content */}
-      <main className="relative z-10 px-6 lg:px-12 py-12 max-w-7xl mx-auto">
+      <main className="relative z-10 px-6 lg:px-12 pt-28 pb-14 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 mb-6">
-            <Sparkles className="w-4 h-4 text-violet-400" />
-            <span className="text-sm text-violet-300">
-              Simple, transparent pricing
-            </span>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span className="text-sm text-muted-foreground">Simple, transparent pricing</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
-            Choose your{" "}
-            <span className="bg-linear-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
-              learning path
-            </span>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+            Choose your <span className="text-gradient">learning path</span>
           </h1>
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-            Start free, upgrade when you&apos;re ready. Unlock Pro for advanced
-            content or go Ultra for AI-powered learning, exclusive
-            masterclasses, and 1-on-1 access.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Start free, upgrade when you are ready. Unlock Pro for advanced content or go Ultra for AI-powered learning
+            and 1-on-1 access.
           </p>
-        </div>
+        </motion.div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          {plans.map((plan) => {
-            const Icon = plan.icon;
-            const isCurrentPlan = currentTier === plan.tier;
-            const canUpgrade =
-              plan.tier !== "free" &&
-              (currentTier === "free" ||
-                (currentTier === "pro" && plan.tier === "ultra"));
-
-            const borderColor =
-              plan.color === "violet"
-                ? "border-violet-500/30 hover:border-violet-500/50"
-                : plan.color === "amber"
-                  ? "border-amber-500/30 hover:border-amber-500/50"
-                  : "border-zinc-800 hover:border-zinc-700";
-
-            const bgGradient =
-              plan.color === "violet"
-                ? "from-violet-500/10"
-                : plan.color === "amber"
-                  ? "from-amber-500/10"
-                  : "from-zinc-800/50";
-
-            const iconBg =
-              plan.color === "violet"
-                ? "bg-violet-600"
-                : plan.color === "amber"
-                  ? "bg-amber-500"
-                  : "bg-zinc-800";
-
-            const checkColor =
-              plan.color === "violet"
-                ? "text-violet-400"
-                : plan.color === "amber"
-                  ? "text-amber-400"
-                  : "text-green-500";
+        <div className="grid md:grid-cols-3 gap-6 mb-20">
+          {plans.map((plan, index) => {
+            const Icon = plan.icon
+            const isCurrentPlan = currentTier === plan.tier
+            const tierRank = { free: 0, pro: 1, ultra: 2 }
+            const currentRank = tierRank[currentTier as keyof typeof tierRank] || 0
+            const planRank = tierRank[plan.tier as keyof typeof tierRank]
+            const canUpgrade = isAuthenticated && planRank > currentRank
+            const isLowerTier = planRank < currentRank
 
             return (
-              <div
+              <motion.div
                 key={plan.tier}
-                className={`relative p-7 rounded-3xl glass border ${borderColor} transition-all duration-300 card-hover ${plan.popular ? 'ring-2 ring-violet-500/50 shadow-xl shadow-violet-500/10' : ''}`}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`relative p-7 rounded-3xl glass-card card-hover ${
+                  plan.popular ? "border border-emerald-500/30 glow-emerald animate-border-glow" : ""
+                } ${plan.color === "amber" ? "border border-amber-500/20 glow-gold" : ""}`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500 text-xs font-bold shadow-lg shadow-violet-500/30">
-                    ⚡ Most Popular
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full bg-emerald-500 text-background text-xs font-bold shadow-lg">
+                    Popular
                   </div>
                 )}
 
-                <div className={`w-14 h-14 rounded-2xl ${iconBg} flex items-center justify-center mb-5 shadow-lg ${plan.color === 'violet' ? 'shadow-violet-500/30' : plan.color === 'amber' ? 'shadow-amber-500/30' : 'shadow-zinc-700/30'}`}>
-                  <Icon className="w-7 h-7 text-white" />
+                <div
+                  className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${
+                    plan.color === "emerald"
+                      ? "bg-emerald-500 shadow-lg shadow-emerald-500/30"
+                      : plan.color === "amber"
+                        ? "bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-500/30"
+                        : "glass"
+                  }`}
+                >
+                  <Icon className={`w-7 h-7 ${plan.color === "zinc" ? "text-muted-foreground" : "text-background"}`} />
                 </div>
 
                 <h3 className="text-2xl font-bold mb-1">{plan.name}</h3>
-                <p className="text-zinc-400 text-sm mb-5">{plan.description}</p>
+                <p className="text-muted-foreground text-sm mb-6">{plan.description}</p>
 
                 <div className="mb-7 pb-7 border-b border-white/5">
-                  <span className="text-4xl font-black">{plan.price}</span>
-                  <span className="text-zinc-400 ml-1">{plan.period}</span>
+                  <span className="text-4xl font-bold">{plan.price}</span>
+                  <span className="text-muted-foreground ml-1">{plan.period}</span>
                 </div>
 
-                <ul className="space-y-3.5 mb-8">
+                <ul className="space-y-4 mb-8">
                   {plan.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex items-start gap-3 text-sm text-zinc-300"
-                    >
-                      <CheckCircle2 className={`w-5 h-5 mt-0 shrink-0 ${checkColor}`} />
+                    <li key={feature} className="flex items-start gap-3 text-sm text-muted-foreground">
+                      <CheckCircle2
+                        className={`w-5 h-5 mt-0 shrink-0 ${
+                          plan.color === "emerald"
+                            ? "text-emerald-400"
+                            : plan.color === "amber"
+                              ? "text-amber-400"
+                              : "text-white/30"
+                        }`}
+                      />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 {isCurrentPlan ? (
-                  <Button className="w-full rounded-xl py-5 glass border border-white/10" variant="outline" disabled>
-                    ✓ Current Plan
+                  <Button
+                    className="w-full rounded-xl py-5 glass border border-white/20 text-foreground cursor-default bg-transparent"
+                    variant="outline"
+                    disabled
+                  >
+                    Current Plan
                   </Button>
                 ) : canUpgrade ? (
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button
+                      className={`w-full rounded-xl py-5 font-semibold transition-all duration-300 btn-shiny ${
+                        plan.color === "emerald"
+                          ? "bg-emerald-500 text-background hover:bg-emerald-400 glow-emerald"
+                          : plan.color === "amber"
+                            ? "bg-gradient-to-r from-amber-400 to-amber-500 text-background hover:from-amber-300 hover:to-amber-400 shadow-lg shadow-amber-500/25"
+                            : "glass hover:bg-white/10 bg-transparent"
+                      }`}
+                      onClick={() => handleUpgrade(plan.tier as "pro" | "ultra")}
+                      disabled={upgrading === plan.tier}
+                    >
+                      {upgrading === plan.tier ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        `Upgrade to ${plan.name}`
+                      )}
+                    </Button>
+                  </motion.div>
+                ) : isLowerTier ? (
                   <Button
-                    className={`w-full rounded-xl py-5 font-semibold transition-all duration-300 ${
-                      plan.color === "violet"
-                        ? "bg-linear-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40"
-                        : plan.color === "amber"
-                          ? "bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40"
-                          : ""
-                    }`}
-                    onClick={() => handleUpgrade(plan.tier as "pro" | "ultra")}
-                    disabled={upgrading === plan.tier}
+                    className="w-full rounded-xl py-5 glass border border-white/10 text-muted-foreground cursor-not-allowed bg-transparent"
+                    variant="outline"
+                    disabled
                   >
-                    {upgrading === plan.tier ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      `Upgrade to ${plan.name}`
-                    )}
+                    Included in your plan
                   </Button>
-                ) : plan.tier === "free" ? (
-                  <Button className="w-full rounded-xl py-5 glass border border-white/10 hover:border-white/20" variant="outline" asChild>
+                ) : plan.tier === "free" && !isAuthenticated ? (
+                  <Button
+                    className="w-full rounded-xl py-5 btn-shiny glass border-white/20 hover:border-white/40 hover:bg-white/5 bg-transparent text-foreground"
+                    variant="outline"
+                    asChild
+                  >
                     <Link href="/auth/signup">Get Started Free</Link>
                   </Button>
                 ) : null}
-              </div>
-            );
+              </motion.div>
+            )
           })}
         </div>
 
         {/* FAQ Section */}
-        <div className="max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
-            Frequently Asked Questions
-          </h2>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="max-w-2xl mx-auto"
+        >
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10 text-gradient">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {[
               {
@@ -269,20 +248,23 @@ export default function PricingPage() {
               },
               {
                 q: "Can I switch between plans?",
-                a: "Absolutely! You can upgrade or downgrade your plan at any time. Changes take effect immediately.",
+                a: "You can upgrade or downgrade your plan at any time. Changes take effect immediately.",
               },
             ].map((faq, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="p-5 rounded-2xl glass border border-white/5 hover:border-white/10 transition-colors"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
+                className="p-5 rounded-2xl glass-card hover:border-white/10 transition-colors"
               >
-                <h3 className="font-semibold mb-2 text-white">{faq.q}</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">{faq.a}</p>
-              </div>
+                <h3 className="font-semibold mb-2 text-foreground">{faq.q}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{faq.a}</p>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </main>
     </div>
-  );
+  )
 }

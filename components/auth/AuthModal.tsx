@@ -79,7 +79,7 @@ export function AuthModal({ isOpen, onClose, defaultMode = "login" }: AuthModalP
           </span>{" "}
           <button
             onClick={() => setMode(mode === "login" ? "signup" : "login")}
-            className="text-violet-400 hover:text-violet-300 font-medium"
+            className="text-white hover:text-zinc-300 font-medium"
           >
             {mode === "login" ? "Sign up" : "Sign in"}
           </button>

@@ -1,7 +1,7 @@
 // Xano API Types
 
 export type Tier = "free" | "pro" | "ultra";
-export type Role = "student" | "teacher" | "admin";
+export type Role = "student" | "teacher";
 
 export interface User {
   id: number;
@@ -56,7 +56,12 @@ export interface CourseWithModules extends Course {
 export interface MuxUploadUrl {
   upload_url: string;
   upload_id: string;
-  asset_id: string;
+}
+
+export interface MuxUploadStatus {
+  id: string;
+  status: 'waiting' | 'asset_created' | 'errored' | 'cancelled' | 'timed_out';
+  asset_id?: string;
 }
 
 export interface MuxAsset {
