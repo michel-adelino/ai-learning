@@ -8,7 +8,7 @@
 
 
 <!-- Badges: responsive horizontal list that wraps when necessary -->
-<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;max-width:1100px;margin:0 auto;">
+<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;max-width:500px;margin:0 auto;">
 	<a href="https://www.xano.com/" target="_blank" rel="noreferrer">
 		<img src="https://img.shields.io/badge/Xano-Backend%20%26%20Database-00DC82?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMOSAyMUwxOSAxNVY1TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==" alt="Xano Backend" />
 	</a>
@@ -29,11 +29,15 @@
 	</a>
 </div>
 
-<!-- Links: each on its own line, centered -->
+<!-- Links: inline centered -->
 <div style="text-align:center;margin-top:8px;line-height:1.6;">
-	<div><a href="https://simply-learn-xano.vercel.app/" target="_blank" rel="noreferrer">Live demo</a></div>
-	<div><a href="https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk" target="_blank" rel="noreferrer">API (Swagger)</a></div>
-	<div><a href="https://www.xano.com/" target="_blank" rel="noreferrer">Xano Backend</a></div>
+	<div style="display:inline-flex;gap:12px;align-items:center;justify-content:center;">
+		<a href="https://simply-learn-xano.vercel.app/" target="_blank" rel="noreferrer">Live demo</a>
+		<span aria-hidden="true">|</span>
+		<a href="https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk" target="_blank" rel="noreferrer">API (Swagger)</a>
+		<span aria-hidden="true">|</span>
+		<a href="https://www.xano.com/" target="_blank" rel="noreferrer">Xano Backend</a>
+	</div>
 </div>
 
 ---
