@@ -35,6 +35,108 @@
 	<div><a href="https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk" target="_blank" rel="noreferrer">API (Swagger)</a></div>
 	<div><a href="https://www.xano.com/" target="_blank" rel="noreferrer">Xano Backend</a></div>
 </div>
+---
+
+<!-- Screenshots -->
+## Screenshots
+
+<details>
+	<summary><b>Landing page</b></summary>
+
+	<img src="screenshots/landing-page.png" alt="Landing page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Dashboard (student)</b></summary>
+
+	<img src="screenshots/student-dashboard.png" alt="Student dashboard" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Dashboard (teacher)</b></summary>
+
+	<img src="screenshots/teacher-dashboard.png" alt="Teacher dashboard" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Course preview</b></summary>
+
+	<img src="screenshots/course-preview-page.png" alt="Course preview" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Course creation</b></summary>
+
+	<img src="screenshots/course-creation-page.png" alt="Course creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Module creation</b></summary>
+
+	<img src="screenshots/module-creation-page.png" alt="Module creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Lesson page</b></summary>
+
+	<img src="screenshots/lesson-page.png" alt="Lesson page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Lesson creation</b></summary>
+
+	<img src="screenshots/lesson-creation-page.png" alt="Lesson creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Auth / Login</b></summary>
+
+	<img src="screenshots/auth-page.png" alt="Auth page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Settings</b></summary>
+
+	<img src="screenshots/settings-page.png" alt="Settings" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Pricing</b></summary>
+
+	<img src="screenshots/pricing-page.png" alt="Pricing" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>AI chat preview</b></summary>
+
+	<img src="screenshots/ai-chat-preview.png" alt="AI chat preview" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Course creation - other</b></summary>
+
+	<img src="screenshots/course-creation-page.png" alt="Course creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Upgrade complete</b></summary>
+
+	<img src="screenshots/upgrade-complete-page.png" alt="Upgrade complete" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
 
 ---
 

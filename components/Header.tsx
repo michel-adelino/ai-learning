@@ -24,10 +24,10 @@ export function Header() {
 
   return (
     <header
-      className="fixed top-5 left-0 right-0 z-50 flex justify-center px-6 pointer-events-none"
+      className="fixed top-5 left-0 right-0 z-50 flex justify-center px-8 pointer-events-none"
     >
       <div
-        className="glass-navbar rounded-full px-6 py-2.5 pointer-events-auto w-full max-w-[1200px] relative"
+        className="glass-navbar rounded-full px-8 py-3 pointer-events-auto w-full max-w-[1200px] relative"
       >
         <div className="flex items-center w-full relative">
           {/* Logo - Left Side */}
@@ -44,13 +44,13 @@ export function Header() {
 
           {/* Navigation Links - Center (only for authenticated users) */}
           {isAuthenticated ? (
-            <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-1 pointer-events-auto">
+            <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-2 pointer-events-auto">
               {loggedInLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-300",
+                    "flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full transition-all duration-300",
                     pathname === link.href
                       ? "text-foreground bg-white/10"
                       : "text-muted-foreground hover:text-foreground hover:bg-white/5",
@@ -66,7 +66,7 @@ export function Header() {
           )}
 
           {/* Right Side - Login & Start Free (anchored to right edge) */}
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2 pointer-events-auto">
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-3 pointer-events-auto">
             {isLoading ? (
               <div className="w-8 h-8 rounded-full glass animate-pulse" />
             ) : isAuthenticated ? (
@@ -78,7 +78,7 @@ export function Header() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-muted-foreground hover:text-foreground hover:bg-white/5 h-8 w-8 rounded-full"
+                      className="text-muted-foreground hover:text-foreground hover:bg-white/5 h-9 w-9 rounded-full"
                     >
                       <Menu className="w-4 h-4" />
                     </Button>
@@ -104,7 +104,7 @@ export function Header() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-muted-foreground hover:text-foreground hover:bg-white/5 font-medium h-8 rounded-full text-sm px-4"
+                    className="text-muted-foreground hover:text-foreground hover:bg-white/5 font-medium h-9 rounded-full text-sm px-5"
                   >
                     Log in
                   </Button>
@@ -112,7 +112,7 @@ export function Header() {
                 <Link href="/auth/signup">
                   <Button
                     size="sm"
-                    className="btn-shiny bg-foreground text-background hover:bg-foreground/90 font-medium h-8 rounded-full text-sm px-4"
+                    className="btn-shiny bg-foreground text-background hover:bg-foreground/90 font-medium h-9 rounded-full text-sm px-5"
                   >
                     <Sparkles className="w-3 h-3 mr-1.5" />
                     Start Free

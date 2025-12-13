@@ -95,7 +95,7 @@ export function UserButton() {
             Settings
           </Link>
         </DropdownMenuItem>
-        {user.tier !== "ultra" && (
+        {(user.tier || "").toLowerCase() !== "ultra" && (
           <DropdownMenuItem asChild>
             <Link
               href="/pricing"
