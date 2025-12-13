@@ -31,6 +31,7 @@ export function CourseCard({
   description,
   tier,
   image_url,
+  teacher,
   moduleCount,
   lessonCount,
   completedLessonCount = 0,
