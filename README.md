@@ -129,6 +129,29 @@
 
 </details>
 
+<details>
+	<summary><b>Dashboard (updated)</b></summary>
+	<img src="screenshots/dashboard-updated-page.png" alt="Dashboard updated" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>MUX storage</b></summary>
+	<img src="screenshots/mux-storage.png" alt="MUX storage" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
+<details>
+	<summary><b>Xano — API & Schema</b></summary>
+	<p style="margin-top:8px;">API builder, scripting and generated Swagger views from the Xano backend.</p>
+	<img src="screenshots/xano-apis.png" alt="Xano APIs" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="screenshots/xano-api-scripting.png" alt="Xano API scripting" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="screenshots/xano-generated-swagger.png" alt="Xano generated swagger" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="screenshots/xano-db-schema.png" alt="Xano DB schema" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="screenshots/xano-db-helper.png" alt="Xano DB helper" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+
+</details>
+
 ---
 
 ## What is Simply Learn?
