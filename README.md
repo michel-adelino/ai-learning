@@ -212,9 +212,9 @@ GOOGLE_GENERATIVE_AI_API_KEY=your-gemini-key
 
 | Table           | Fields                                                             |
 | --------------- | ------------------------------------------------------------------ |
-| `users`         | id, email, password, first_name, last_name, tier, role, avatar_url |
+| `users`         | id, email, password, first_name, last_name, tier (free|pro|ultra), role (student|teacher), avatar_url, created_at, updated_at |
 | `categories`    | id, title, slug                                                    |
-| `courses`       | id, title, slug, description, image_url, tier, teacher, featured   |
+| `courses`       | id, title, slug, description, image_url, tier (free|pro|ultra), featured, category, teacher (id), module_count, lesson_count, created_at, updated_at   |
 | `modules`       | id, title, course, order_index                                     |
 | `lessons`       | id, title, slug, content, module, mux_playback_id, duration        |
 | `user_progress` | id, user, lesson, completed, completed_at                          |
@@ -225,18 +225,28 @@ GOOGLE_GENERATIVE_AI_API_KEY=your-gemini-key
 
 📚 **Full Documentation:** [Swagger](https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk)
 
-| Endpoint                    | Method | Auth    | Description           |
-| --------------------------- | ------ | ------- | --------------------- |
-| `/auth/signup`              | POST   | No      | Register              |
-| `/auth/login`               | POST   | No      | Login                 |
-| `/auth/me`                  | GET    | Yes     | Current user          |
-| `/courses`                  | GET    | No      | List courses          |
-| `/courses/{slug}`           | GET    | No      | Course details        |
-| `/lessons/{slug}`           | GET    | No      | Lesson details        |
-| `/progress/complete-lesson` | POST   | Yes     | Mark complete         |
-| `/mux/signed-tokens`        | POST   | Yes     | Video playback tokens |
-| `/teacher/courses`          | POST   | Teacher | Create course         |
-| `/teacher/lessons`          | POST   | Teacher | Create lesson         |
+| Endpoint                          | Method | Auth    | Description                                 |
+| --------------------------------- | ------ | ------- | ------------------------------------------- |
+| `/auth/signup`                    | POST   | No      | Register / create account                   |
+| `/auth/login`                     | POST   | No      | Login / obtain auth token                   |
+| `/auth/me`                        | GET    | Yes     | Get current authenticated user profile      |
+| `/auth/profile`                   | PATCH  | Yes     | Update authenticated user's profile         |
+| `/auth/upgrade-tier`              | POST   | Yes     | Upgrade user's subscription tier            |
+| `/courses`                        | GET    | No      | List all courses (with modules/lessons)     |
+| `/courses/featured`               | GET    | No      | Get featured courses                        |
+| `/courses/{slug}`                 | GET    | No      | Get course by slug (includes modules)       |
+| `/lessons/{slug}`                 | GET    | No      | Get lesson by slug (full content)           |
+| `/progress/complete-lesson`       | POST   | Yes     | Mark a lesson completed for current user    |
+| `/search`                         | GET    | No      | Search courses and lessons                   |
+| `/mux/signed-tokens`              | POST   | Yes     | Generate signed tokens for MUX playback     |
+| `/mux/upload-url`                 | POST   | Yes     | Generate direct upload URL for teachers     |
+| `/mux/get_asset`                  | GET    | Yes     | Get Mux asset details by asset id           |
+| `/mux/get_upload`                 | GET    | Yes     | Check Mux upload status                      |
+| `/teacher/courses`                | GET    | Teacher | Get teacher's courses                       |
+| `/teacher/courses`                | POST   | Teacher | Create a new course                         |
+| `/teacher/courses/{course_id}`    | GET    | Teacher | Get single teacher course (with modules)    |
+| `/teacher/modules`                | POST   | Teacher | Create module for a course                  |
+| `/teacher/lessons`                | POST   | Teacher | Create lesson for a module                  |
 
 See [`xanoscript/`](./xanoscript/) for endpoint implementations.
 
