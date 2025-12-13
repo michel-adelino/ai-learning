@@ -72,7 +72,7 @@ export function CourseCard({
 
           {/* Course thumbnail/header */}
           <div
-            className={`h-48 bg-gradient-to-br ${styles.gradient} flex items-center justify-center relative overflow-hidden`}
+            className={`h-32 sm:h-40 md:h-48 bg-gradient-to-br ${styles.gradient} flex items-center justify-center relative overflow-hidden`}
           >
             {imageUrl ? (
               <Image
@@ -132,8 +132,8 @@ export function CourseCard({
           </div>
 
           {/* Course content */}
-          <div className="p-6 relative">
-            <h3 className="text-lg font-bold mb-2.5 text-foreground group-hover:text-gradient transition-all duration-300 line-clamp-2">
+          <div className="p-4 sm:p-5 md:p-6 relative">
+            <h3 className="text-base sm:text-lg font-bold mb-2.5 text-foreground group-hover:text-gradient transition-all duration-300 line-clamp-2">
               {title ?? "Untitled Course"}
             </h3>
 
@@ -143,7 +143,7 @@ export function CourseCard({
               )}
 
               {description && (
-              <p className="text-sm text-muted-foreground mb-5 line-clamp-2 leading-relaxed">{description}</p>
+              <p className="text-sm text-muted-foreground mb-4 sm:mb-5 line-clamp-2 leading-relaxed">{description}</p>
             )}
 
             <div className="flex items-center gap-3 text-sm">

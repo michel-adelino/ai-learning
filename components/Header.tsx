@@ -37,7 +37,7 @@ export function Header() {
               alt="Simply Learn"
               width={100}
               height={18}
-              className="h-5 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
+              className="h-4 sm:h-5 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
               priority
             />
           </Link>
