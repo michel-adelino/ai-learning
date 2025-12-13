@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Comfortaa, Geist_Mono } from "next/font/google"
 import "./globals.css"
+import { Analytics } from "@vercel/analytics/react"
 
 const comfortaa = Comfortaa({
   variable: "--font-comfortaa",
@@ -15,9 +16,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Simply Learn | Learn to Code",
+  title: "Simply Learn",
   description: "Master coding the modern way with expertly crafted courses, modules, and hands-on lessons.",
-    generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -27,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${comfortaa.variable} ${geistMono.variable} font-sans antialiased`}>{children}</body>
+      <body className={`${comfortaa.variable} ${geistMono.variable} font-sans antialiased`}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   )
 }
