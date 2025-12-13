@@ -72,6 +72,13 @@ export default async function CoursePage({ params }: CoursePageProps) {
       }
       return null;
     })(),
+    teacher: (() => {
+      const t = course.teacher as { id?: number; first_name?: string; last_name?: string } | null;
+      if (t && typeof t === 'object' && !isEmptyObject(t) && t.id) {
+        return { _id: String(t.id), first_name: safeString(t.first_name), last_name: safeString(t.last_name) };
+      }
+      return null;
+    })(),
     modules: modulesWithLessons.map((m) => ({
       _id: String(m.id),
       title: safeString(m.title) || "Untitled Module",

@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Lock, Play, Layers, CheckCircle2, Clock } from "lucide-react"
 import { TIER_STYLES } from "@/lib/constants"
-import type { Tier } from "@/lib/xano/types"
+import type { Tier, User } from "@/lib/xano/types"
 import { motion } from "framer-motion"
 
 export interface CourseCardProps {
@@ -14,6 +14,7 @@ export interface CourseCardProps {
   image_url?: string | null
   moduleCount?: number | null
   lessonCount?: number | null
+  teacher?: Pick<User, "id" | "first_name" | "last_name"> | null
   slug?: string | { current: string } | null
   href?: string
   completedLessonCount?: number | null
@@ -135,7 +136,12 @@ export function CourseCard({
               {title ?? "Untitled Course"}
             </h3>
 
-            {description && (
+              {/* Teacher name */}
+              {teacher && (
+                <p className="text-sm text-muted-foreground mb-1">By {`${teacher.first_name ?? ""}${teacher.last_name ? ` ${teacher.last_name}` : ""}`.trim() || "Instructor"}</p>
+              )}
+
+              {description && (
               <p className="text-sm text-muted-foreground mb-5 line-clamp-2 leading-relaxed">{description}</p>
             )}
 

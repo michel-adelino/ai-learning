@@ -3,7 +3,7 @@ import Link from "next/link"
 import { ArrowLeft, BookOpen, Play, Tag } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { TIER_STYLES } from "@/lib/constants"
-import type { Tier } from "@/lib/xano/types"
+import type { Tier, User } from "@/lib/xano/types"
 
 interface CourseHeroProps {
   title?: string | null
@@ -13,6 +13,7 @@ interface CourseHeroProps {
   category?: { _id?: string; title?: string | null } | null
   moduleCount?: number | null
   lessonCount?: number | null
+  teacher?: Pick<User, "id" | "first_name" | "last_name"> | { _id?: string; first_name?: string | null; last_name?: string | null } | null
 }
 
 export function CourseHero({
@@ -23,6 +24,7 @@ export function CourseHero({
   category,
   moduleCount,
   lessonCount,
+  teacher,
 }: CourseHeroProps) {
   const displayTier = tier ?? "free"
   const styles = TIER_STYLES[displayTier]
@@ -74,6 +76,10 @@ export function CourseHero({
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 text-gradient leading-tight">
             {typeof title === "string" ? title : "Untitled Course"}
           </h1>
+
+          {teacher && (teacher.first_name || teacher.last_name) && (
+            <p className="text-sm text-muted-foreground mb-4">By {`${teacher.first_name ?? ""}${teacher.last_name ? ` ${teacher.last_name}` : ""}`.trim()}</p>
+          )}
 
           {description && typeof description === "string" && (
             <p className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-2xl">{description}</p>

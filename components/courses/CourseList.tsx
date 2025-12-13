@@ -82,6 +82,7 @@ export function CourseList({
               description={course.description}
               tier={course.tier}
               image_url={course.image_url}
+              teacher={course.teacher as any}
               moduleCount={course.module_count}
               lessonCount={course.lesson_count}
               isLocked={!hasTierAccess(userTier, course.tier)}

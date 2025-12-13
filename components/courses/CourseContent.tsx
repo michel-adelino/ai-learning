@@ -19,6 +19,7 @@ interface CourseContentProps {
     moduleCount?: number | null;
     lessonCount?: number | null;
     slug?: { current?: string | null } | null;
+    teacher?: { _id?: string; first_name?: string | null; last_name?: string | null } | null;
     modules?: Array<{
       _id: string;
       title?: string | null;
@@ -74,6 +75,7 @@ export function CourseContent({ course, userId }: CourseContentProps) {
         tier={course.tier}
         thumbnail={course.thumbnail}
         category={course.category}
+        teacher={course.teacher}
         moduleCount={course.moduleCount}
         lessonCount={course.lessonCount}
       />

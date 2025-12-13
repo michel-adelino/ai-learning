@@ -42,6 +42,17 @@
 
 ---
 
+**TODO (Maybe or Maybe NOT)**
+
+- **Likes/Dislikes:** Add the ability for users to like or dislike courses, and display total likes/dislikes on course cards and course pages.
+- **Views:** Track and display view counts for lessons and courses so popular content can be surfaced.
+- **Payments:** Integrate a payment gateway (e.g., Stripe) to support subscriptions and one-time course purchases; include webhook handling for fulfillment.
+- **OAuth:** Add OAuth providers (Google, GitHub) for one-click sign-in and easier onboarding.
+- **Notes Editor:** Add a Monaco-based notes editor (per-lesson, persisted per-user) for personal notes and scratchpad functionality.
+- **Visual QA:** Run a local build and visually verify the header/nav and course UI across breakpoints.
+
+---
+
 <!-- Screenshots -->
 ## Screenshots
 
