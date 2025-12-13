@@ -534,14 +534,13 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">© 2025 Simply Learn. All rights reserved.</p>
             <div className="flex items-center gap-6">
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Privacy
-              </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Terms
-              </Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Contact
+              <Link
+                href="https://github.com/ARYPROGRAMMER/Simply-Learn"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Do star
               </Link>
             </div>
           </div>
