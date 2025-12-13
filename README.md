@@ -24,6 +24,9 @@
 	<a href="https://www.mux.com/" target="_blank" rel="noreferrer">
 		<img src="https://img.shields.io/badge/MUX-Video-FF5A5F?style=for-the-badge" alt="MUX" />
 	</a>
+	<a href="https://youtu.be/r6rAGLxCMT0" target="_blank" rel="noreferrer">
+		<img src="https://img.shields.io/badge/Demo%20Video-YouTube-FF0000?style=for-the-badge&logo=youtube" alt="Demo Video" />
+	</a>
 	<a href="./LICENSE">
 		<img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="MIT License" />
 	</a>
@@ -32,11 +35,13 @@
 <!-- Links: inline centered -->
 <div style="text-align:center;margin-top:8px;line-height:1.6;">
 	<div style="display:inline-flex;gap:12px;align-items:center;justify-content:center;">
-		<a href="https://simply-learn-xano.vercel.app/" target="_blank" rel="noreferrer">Live demo</a>
+			<a href="https://simply-learn-xano.vercel.app/" target="_blank" rel="noreferrer">Live demo</a>
 		<span aria-hidden="true">|</span>
 		<a href="https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk" target="_blank" rel="noreferrer">API (Swagger)</a>
 		<span aria-hidden="true">|</span>
-		<a href="https://www.xano.com/" target="_blank" rel="noreferrer">Xano Backend</a>
+			<a href="https://www.xano.com/" target="_blank" rel="noreferrer">Xano Backend</a>
+			<span aria-hidden="true">|</span>
+			<a href="https://youtu.be/r6rAGLxCMT0" target="_blank" rel="noreferrer">Demo Video</a>
 	</div>
 </div>
 
@@ -57,73 +62,73 @@
 
 <details>
 	<summary><b>Landing page</b></summary>
-	<img src="screenshots/landing-page.png" alt="Landing page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/landing-page.png" alt="Landing page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Dashboard (student)</b></summary>
-	<img src="screenshots/student-dashboard.png" alt="Student dashboard" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/student-dashboard.png" alt="Student dashboard" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Dashboard (teacher)</b></summary>
-	<img src="screenshots/teacher-dashboard.png" alt="Teacher dashboard" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/teacher-dashboard.png" alt="Teacher dashboard" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Course preview</b></summary>
-	<img src="screenshots/course-preview-page.png" alt="Course preview" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/course-preview-page.png" alt="Course preview" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Course creation</b></summary>
-	<img src="screenshots/course-creation-page.png" alt="Course creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/course-creation-page.png" alt="Course creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Module creation</b></summary>
-	<img src="screenshots/module-creation-page.png" alt="Module creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/module-creation-page.png" alt="Module creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Lesson page</b></summary>
-	<img src="screenshots/lesson-page.png" alt="Lesson page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/lesson-page.png" alt="Lesson page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Lesson creation</b></summary>
-	<img src="screenshots/lesson-creation-page.png" alt="Lesson creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/lesson-creation-page.png" alt="Lesson creation" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Auth / Login</b></summary>
-	<img src="screenshots/auth-page.png" alt="Auth page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/auth-page.png" alt="Auth page" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Settings</b></summary>
-	<img src="screenshots/settings-page.png" alt="Settings" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/settings-page.png" alt="Settings" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Pricing</b></summary>
-	<img src="screenshots/pricing-page.png" alt="Pricing" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/pricing-page.png" alt="Pricing" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>AI chat preview</b></summary>
-	<img src="screenshots/ai-chat-preview.png" alt="AI chat preview" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/ai-chat-preview.png" alt="AI chat preview" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
@@ -135,19 +140,19 @@
 
 <details>
 	<summary><b>Upgrade complete</b></summary>
-	<img src="screenshots/upgrade-complete-page.png" alt="Upgrade complete" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/upgrade-complete-page.png" alt="Upgrade complete" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>Dashboard (updated)</b></summary>
-	<img src="screenshots/dashboard-updated-page.png" alt="Dashboard updated" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/dashboard-updated-page.png" alt="Dashboard updated" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
 <details>
 	<summary><b>MUX storage</b></summary>
-	<img src="screenshots/mux-storage.png" alt="MUX storage" style="max-width:100%;border-radius:8px;margin-top:8px;" />
+	<img src="public/screenshots/mux-storage.png" alt="MUX storage" style="max-width:100%;border-radius:8px;margin-top:8px;" />
 
 </details>
 
@@ -217,6 +222,13 @@ GOOGLE_GENERATIVE_AI_API_KEY=your-gemini-key
 ```
 
 ---
+
+## Demo Accounts
+
+Use these test accounts to explore the app quickly (no sign-up required on some demo instances):
+
+- **Student:** `student@gmail.com` / `Student@123`
+- **Teacher:** `teacher@gmail.com` / `Teacher@123`
 
 ## Database Schema (Xano)
 

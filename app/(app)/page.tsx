@@ -19,9 +19,12 @@ import {
   TrendingUp,
   CheckCircle,
   GraduationCap,
+  GithubIcon,
 } from "lucide-react"
 import { getFeaturedCourses, getPlatformStats } from "@/lib/xano/client"
 import { getServerUser } from "@/lib/xano/server-auth"
+import DemoPlayer from "@/components/hero/DemoPlayer"
+import ScreenshotsCarousel from "@/components/hero/ScreenshotsCarousel"
 
 const features = [
   {
@@ -191,80 +194,21 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Right side - Floating lesson preview card */}
-            <div
-              className="relative hidden lg:flex items-center justify-center animate-fade-in"
-              style={{ animationDelay: "0.5s" }}
-            >
-              {/* Main lesson card */}
-              <div className="relative animate-float-card">
-                <div className="lesson-card rounded-2xl p-1 w-[380px]">
-                  {/* Window header with traffic lights */}
-                  <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
-                    <div className="traffic-dot traffic-red" />
-                    <div className="traffic-dot traffic-yellow" />
-                    <div className="traffic-dot traffic-green" />
-                  </div>
+            {/* Right side - creative floating DemoPlayer */}
+            <DemoPlayer />
+          </div>
+        </section>
 
-                  {/* Lesson content preview */}
-                  <div className="p-6 space-y-4">
-                    <div className="space-y-2">
-                      <p className="text-muted-foreground text-sm font-mono">// Your learning journey</p>
-                      <p className="font-mono text-sm">
-                        <span className="text-purple-400">const</span> <span className="text-emerald-400">learn</span>{" "}
-                        <span className="text-white">=</span> <span className="text-amber-400">async</span>{" "}
-                        <span className="text-white">{"() => {"}</span>
-                      </p>
-                      <p className="font-mono text-sm pl-4">
-                        <span className="text-purple-400">await</span> <span className="text-blue-400">practice</span>
-                        <span className="text-white">();</span>
-                      </p>
-                      <p className="font-mono text-sm pl-4">
-                        <span className="text-purple-400">return</span>{" "}
-                        <span className="text-emerald-300">'success'</span>
-                        <span className="text-white">;</span>
-                      </p>
-                      <p className="font-mono text-sm">
-                        <span className="text-white">{"};"}</span>
-                      </p>
-                    </div>
+        {/* Screenshots Carousel */}
+        <section id="screenshots" className="px-6 lg:px-12 py-16 max-w-7xl mx-auto">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-semibold text-foreground">Screenshots</h3>
+            <p className="text-muted-foreground">Browse the UI snapshots from the app</p>
+          </div>
 
-                    {/* Play button overlay */}
-                    <div className="flex items-center justify-center py-4">
-                      <div className="w-14 h-14 rounded-full glass flex items-center justify-center border border-white/10 hover:border-white/20 transition-colors cursor-pointer group">
-                        <Play className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors ml-1" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating progress badge */}
-                <div className="absolute -top-4 -right-4 animate-float" style={{ animationDelay: "0.5s" }}>
-                  <div className="glass-card rounded-xl px-4 py-2.5 flex items-center gap-2.5 border border-white/10">
-                    <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
-                      <CheckCircle className="w-3 h-3 text-background" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Progress</p>
-                      <p className="text-sm font-semibold text-foreground">12 lessons done</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating AI Tutor badge */}
-                <div className="absolute -bottom-4 -left-8 animate-float" style={{ animationDelay: "1s" }}>
-                  <div className="glass-card rounded-xl px-4 py-2.5 flex items-center gap-2.5 border border-amber-500/20 glow-gold">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-background" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">AI Tutor</p>
-                      <p className="text-sm font-semibold text-foreground">Always ready</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Carousel component */}
+          <div className="mt-6">
+            <ScreenshotsCarousel />
           </div>
         </section>
 
@@ -534,6 +478,7 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">© 2025 Simply Learn. All rights reserved.</p>
             <div className="flex items-center gap-6">
+                 <GithubIcon/>
               <Link
                 href="https://github.com/ARYPROGRAMMER/Simply-Learn"
                 target="_blank"
@@ -541,7 +486,9 @@ export default async function Home() {
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Do star
+              
               </Link>
+             
             </div>
           </div>
         </footer>
