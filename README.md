@@ -232,14 +232,14 @@ Use these test accounts to explore the app quickly (no sign-up required on some 
 
 ## Database Schema (Xano)
 
-| Table           | Fields                                                      |
-| --------------- | ----------------------------------------------------------- | --- | -------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `users`         | id, email, password, first_name, last_name, tier (free      | pro | ultra), role (student                                                                        | teacher), avatar_url, created_at, updated_at |
-| `categories`    | id, title, slug                                             |
-| `courses`       | id, title, slug, description, image_url, tier (free         | pro | ultra), featured, category, teacher (id), module_count, lesson_count, created_at, updated_at |
-| `modules`       | id, title, course, order_index                              |
-| `lessons`       | id, title, slug, content, module, mux_playback_id, duration |
-| `user_progress` | id, user, lesson, completed, completed_at                   |
+| Table | Fields |
+| ----- | ------ |
+| `users` | id, created_at, email, password, first_name, last_name, tier (enum), avatar_url, role (enum), updated_at |
+| `categories` | id, created_at, title, slug |
+| `courses` | id, created_at, title, slug, description, image_url, tier (enum), featured (bool), category (integer), teacher (integer), module_count (integer), lesson_count (integer), updated_at |
+| `modules` | id, created_at, title, order_index (integer), course (integer) |
+| `lessons` | id, created_at, title, slug, description, content, order_index (integer), mux_playback_id, duration (integer), module (integer) |
+| `user_progress` | id, created_at, completed (bool), completed_at, user (integer), lesson (integer) |
 
 ---
 
