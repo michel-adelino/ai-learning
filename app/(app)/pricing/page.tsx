@@ -1,12 +1,19 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useState } from "react"
-import { CheckCircle2, Sparkles, Loader2, Rocket, Crown, GraduationCap } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Header } from "@/components/Header"
-import { useAuth } from "@/lib/xano/auth-context"
-import { motion } from "framer-motion"
+import Link from "next/link";
+import { useState } from "react";
+import {
+  CheckCircle2,
+  Sparkles,
+  Loader2,
+  Rocket,
+  Crown,
+  GraduationCap,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Header } from "@/components/Header";
+import { useAuth } from "@/lib/xano/auth-context";
+import { motion } from "framer-motion";
 
 const plans = [
   {
@@ -17,7 +24,11 @@ const plans = [
     icon: GraduationCap,
     description: "Perfect for getting started",
     color: "zinc",
-    features: ["Access to free courses", "Community support", "Progress tracking"],
+    features: [
+      "Access to free courses",
+      "Community support",
+      "Progress tracking",
+    ],
   },
   {
     name: "Pro",
@@ -28,7 +39,12 @@ const plans = [
     description: "For serious learners",
     color: "emerald",
     popular: true,
-    features: ["Everything in Free", "Access to Pro courses", "Priority support", "Downloadable resources"],
+    features: [
+      "Everything in Free",
+      "Access to Pro courses",
+      "Priority support",
+      "Downloadable resources",
+    ],
   },
   {
     name: "Ultra",
@@ -46,31 +62,35 @@ const plans = [
       "Early access to new courses",
     ],
   },
-]
+];
 
 export default function PricingPage() {
-  const { user, isAuthenticated, upgradeTier, isLoading: authLoading } = useAuth()
-  const [upgrading, setUpgrading] = useState<string | null>(null)
+  const {
+    user,
+    isAuthenticated,
+    upgradeTier,
+    isLoading: authLoading,
+  } = useAuth();
+  const [upgrading, setUpgrading] = useState<string | null>(null);
 
   const handleUpgrade = async (tier: "pro" | "ultra") => {
     if (!isAuthenticated) {
-      window.location.href = "/auth/signup"
-      return
+      window.location.href = "/auth/signup";
+      return;
     }
 
-    setUpgrading(tier)
+    setUpgrading(tier);
     try {
-      await upgradeTier(tier)
-      alert(`Upgraded to ${tier}! In production, this would process payment.`)
+      await upgradeTier(tier);
+      alert(`Upgraded to ${tier}! In production, this would process payment.`);
     } catch (error) {
-      console.error("Upgrade failed:", error)
-      alert("Failed to upgrade. Please try again.")
+      alert("Failed to upgrade. Please try again.");
     } finally {
-      setUpgrading(null)
+      setUpgrading(null);
     }
-  }
+  };
 
-  const currentTier = user?.tier || "free"
+  const currentTier = user?.tier || "free";
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
@@ -96,27 +116,30 @@ export default function PricingPage() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span className="text-sm text-muted-foreground">Simple, transparent pricing</span>
+            <span className="text-sm text-muted-foreground">
+              Simple, transparent pricing
+            </span>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
             Choose your <span className="text-gradient">learning path</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Start free, upgrade when you are ready. Unlock Pro for advanced content or go Ultra for AI-powered learning
-            and 1-on-1 access.
+            Start free, upgrade when you are ready. Unlock Pro for advanced
+            content or go Ultra for AI-powered learning and 1-on-1 access.
           </p>
         </motion.div>
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-20">
           {plans.map((plan, index) => {
-            const Icon = plan.icon
-            const isCurrentPlan = currentTier === plan.tier
-            const tierRank = { free: 0, pro: 1, ultra: 2 }
-            const currentRank = tierRank[currentTier as keyof typeof tierRank] || 0
-            const planRank = tierRank[plan.tier as keyof typeof tierRank]
-            const canUpgrade = isAuthenticated && planRank > currentRank
-            const isLowerTier = planRank < currentRank
+            const Icon = plan.icon;
+            const isCurrentPlan = currentTier === plan.tier;
+            const tierRank = { free: 0, pro: 1, ultra: 2 };
+            const currentRank =
+              tierRank[currentTier as keyof typeof tierRank] || 0;
+            const planRank = tierRank[plan.tier as keyof typeof tierRank];
+            const canUpgrade = isAuthenticated && planRank > currentRank;
+            const isLowerTier = planRank < currentRank;
 
             return (
               <motion.div
@@ -125,8 +148,14 @@ export default function PricingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className={`relative p-7 rounded-3xl glass-card card-hover ${
-                  plan.popular ? "border border-emerald-500/30 glow-emerald animate-border-glow" : ""
-                } ${plan.color === "amber" ? "border border-amber-500/20 glow-gold" : ""}`}
+                  plan.popular
+                    ? "border border-emerald-500/30 glow-emerald animate-border-glow"
+                    : ""
+                } ${
+                  plan.color === "amber"
+                    ? "border border-amber-500/20 glow-gold"
+                    : ""
+                }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full bg-emerald-500 text-background text-xs font-bold shadow-lg">
@@ -139,31 +168,44 @@ export default function PricingPage() {
                     plan.color === "emerald"
                       ? "bg-emerald-500 shadow-lg shadow-emerald-500/30"
                       : plan.color === "amber"
-                        ? "bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-500/30"
-                        : "glass"
+                      ? "bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-500/30"
+                      : "glass"
                   }`}
                 >
-                  <Icon className={`w-7 h-7 ${plan.color === "zinc" ? "text-muted-foreground" : "text-background"}`} />
+                  <Icon
+                    className={`w-7 h-7 ${
+                      plan.color === "zinc"
+                        ? "text-muted-foreground"
+                        : "text-background"
+                    }`}
+                  />
                 </div>
 
                 <h3 className="text-2xl font-bold mb-1">{plan.name}</h3>
-                <p className="text-muted-foreground text-sm mb-6">{plan.description}</p>
+                <p className="text-muted-foreground text-sm mb-6">
+                  {plan.description}
+                </p>
 
                 <div className="mb-7 pb-7 border-b border-white/5">
                   <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-muted-foreground ml-1">{plan.period}</span>
+                  <span className="text-muted-foreground ml-1">
+                    {plan.period}
+                  </span>
                 </div>
 
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm text-muted-foreground">
+                    <li
+                      key={feature}
+                      className="flex items-start gap-3 text-sm text-muted-foreground"
+                    >
                       <CheckCircle2
                         className={`w-5 h-5 mt-0 shrink-0 ${
                           plan.color === "emerald"
                             ? "text-emerald-400"
                             : plan.color === "amber"
-                              ? "text-amber-400"
-                              : "text-white/30"
+                            ? "text-amber-400"
+                            : "text-white/30"
                         }`}
                       />
                       <span>{feature}</span>
@@ -180,16 +222,21 @@ export default function PricingPage() {
                     Current Plan
                   </Button>
                 ) : canUpgrade ? (
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
                     <Button
                       className={`w-full rounded-xl py-5 font-semibold transition-all duration-300 btn-shiny ${
                         plan.color === "emerald"
                           ? "bg-emerald-500 text-background hover:bg-emerald-400 glow-emerald"
                           : plan.color === "amber"
-                            ? "bg-gradient-to-r from-amber-400 to-amber-500 text-background hover:from-amber-300 hover:to-amber-400 shadow-lg shadow-amber-500/25"
-                            : "glass hover:bg-white/10 bg-transparent"
+                          ? "bg-gradient-to-r from-amber-400 to-amber-500 text-background hover:from-amber-300 hover:to-amber-400 shadow-lg shadow-amber-500/25"
+                          : "glass hover:bg-white/10 bg-transparent"
                       }`}
-                      onClick={() => handleUpgrade(plan.tier as "pro" | "ultra")}
+                      onClick={() =>
+                        handleUpgrade(plan.tier as "pro" | "ultra")
+                      }
                       disabled={upgrading === plan.tier}
                     >
                       {upgrading === plan.tier ? (
@@ -220,7 +267,7 @@ export default function PricingPage() {
                   </Button>
                 ) : null}
               </motion.div>
-            )
+            );
           })}
         </div>
 
@@ -231,7 +278,9 @@ export default function PricingPage() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="max-w-2xl mx-auto"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10 text-gradient">Frequently Asked Questions</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10 text-gradient">
+            Frequently Asked Questions
+          </h2>
           <div className="space-y-4">
             {[
               {
@@ -259,12 +308,14 @@ export default function PricingPage() {
                 className="p-5 rounded-2xl glass-card hover:border-white/10 transition-colors"
               >
                 <h3 className="font-semibold mb-2 text-foreground">{faq.q}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{faq.a}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {faq.a}
+                </p>
               </motion.div>
             ))}
           </div>
         </motion.div>
       </main>
     </div>
-  )
+  );
 }

@@ -1,48 +1,48 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useRef, useEffect } from "react"
-import { useAuth } from "@/lib/xano/auth-context"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Send, Loader2, Sparkles, X, MessageCircle } from "lucide-react"
-import ReactMarkdown from "react-markdown"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useRef, useEffect } from "react";
+import { useAuth } from "@/lib/xano/auth-context";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Send, Loader2, Sparkles, X, MessageCircle } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Message {
-  role: "user" | "assistant"
-  content: string
+  role: "user" | "assistant";
+  content: string;
 }
 
 export function TutorWidget() {
-  const { user, isAuthenticated } = useAuth()
-  const [isOpen, setIsOpen] = useState(false)
-  const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const { user, isAuthenticated } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const isUltra = user?.tier === "ultra"
+  const isUltra = user?.tier === "ultra";
 
   // Scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   // Don't show widget if not Ultra
   if (!isAuthenticated || !isUltra) {
-    return null
+    return null;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!input.trim() || isLoading) return
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
 
-    const userMessage = input.trim()
-    setInput("")
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }])
-    setIsLoading(true)
+    const userMessage = input.trim();
+    setInput("");
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/chat", {
@@ -53,27 +53,29 @@ export function TutorWidget() {
         body: JSON.stringify({
           messages: [...messages, { role: "user", content: userMessage }],
         }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to get response")
+        throw new Error("Failed to get response");
       }
 
-      const data = await response.json()
-      setMessages((prev) => [...prev, { role: "assistant", content: data.content }])
+      const data = await response.json();
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: data.content },
+      ]);
     } catch (error) {
-      console.error("Chat error:", error)
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
           content: "Sorry, I encountered an error. Please try again.",
         },
-      ])
+      ]);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -111,7 +113,9 @@ export function TutorWidget() {
                   <Sparkles className="w-5 h-5 text-black" />
                 </div>
                 <div>
-                  <span className="font-semibold text-foreground">AI Tutor</span>
+                  <span className="font-semibold text-foreground">
+                    AI Tutor
+                  </span>
                   <span className="ml-2 text-xs text-amber-400 glass px-2 py-0.5 rounded-full border border-amber-500/20">
                     Ultra
                   </span>
@@ -138,9 +142,12 @@ export function TutorWidget() {
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center mx-auto mb-4">
                     <Sparkles className="w-8 h-8 text-amber-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">Hi, I am your AI Tutor!</h3>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                    Hi, I am your AI Tutor!
+                  </h3>
                   <p className="text-muted-foreground text-sm max-w-xs mx-auto">
-                    Ask me anything about the courses or get help with coding concepts.
+                    Ask me anything about the courses or get help with coding
+                    concepts.
                   </p>
                 </motion.div>
               )}
@@ -150,11 +157,15 @@ export function TutorWidget() {
                   key={index}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex ${
+                    message.role === "user" ? "justify-end" : "justify-start"
+                  }`}
                 >
                   <div
                     className={`max-w-[85%] rounded-2xl px-4 py-3 ${
-                      message.role === "user" ? "bg-foreground text-background" : "glass text-foreground"
+                      message.role === "user"
+                        ? "bg-foreground text-background"
+                        : "glass text-foreground"
                     }`}
                   >
                     {message.role === "assistant" ? (
@@ -184,11 +195,19 @@ export function TutorWidget() {
               ))}
 
               {isLoading && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex justify-start"
+                >
                   <div className="glass rounded-2xl px-4 py-3">
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      transition={{
+                        duration: 1,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "linear",
+                      }}
                     >
                       <Loader2 className="w-5 h-5 text-amber-400" />
                     </motion.div>
@@ -200,7 +219,10 @@ export function TutorWidget() {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-white/5">
+            <form
+              onSubmit={handleSubmit}
+              className="p-4 border-t border-white/5"
+            >
               <div className="flex gap-2">
                 <Input
                   value={input}
@@ -209,7 +231,10 @@ export function TutorWidget() {
                   className="flex-1 glass border-white/10 text-foreground placeholder:text-muted-foreground rounded-xl h-11"
                   disabled={isLoading}
                 />
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <Button
                     type="submit"
                     size="icon"
@@ -225,5 +250,5 @@ export function TutorWidget() {
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }

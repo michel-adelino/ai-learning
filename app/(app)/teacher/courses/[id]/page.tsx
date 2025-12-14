@@ -22,6 +22,9 @@ import {
   getCourseBySlug,
   createModule,
   createLesson,
+  deleteCourse,
+  deleteModule,
+  deleteLesson,
 } from "@/lib/xano/client";
 import { MuxUpload } from "@/components/teacher/MuxUpload";
 import type { CourseWithModules, Module, Lesson } from "@/lib/xano/types";
@@ -43,7 +46,9 @@ export default function CourseEditorPage() {
 
   const [course, setCourse] = useState<CourseWithModules | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [expandedModules, setExpandedModules] = useState<Set<number>>(new Set());
+  const [expandedModules, setExpandedModules] = useState<Set<number>>(
+    new Set()
+  );
 
   // Module creation state
   const [showModuleForm, setShowModuleForm] = useState(false);
@@ -61,9 +66,14 @@ export default function CourseEditorPage() {
   const [lessonDuration, setLessonDuration] = useState(0);
   const [isCreatingLesson, setIsCreatingLesson] = useState(false);
 
+  // Deletion state
+  const [deletingCourse, setDeletingCourse] = useState(false);
+  const [deletingModule, setDeletingModule] = useState<number | null>(null);
+  const [deletingLesson, setDeletingLesson] = useState<number | null>(null);
+
   const fetchCourse = useCallback(async () => {
     if (!authToken) return;
-    
+
     try {
       // Note: We need to fetch by ID, but the client uses slug
       // For now, we'll use a workaround - fetch teacher's courses and find by ID
@@ -75,24 +85,25 @@ export default function CourseEditorPage() {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch course");
       }
-      
+
       const data = await response.json();
-      
+
       // Transform data: nest lessons inside their respective modules
       if (data.modules && data.lessons) {
         data.modules = data.modules.map((module: Module) => ({
           ...module,
-          lessons: data.lessons.filter((lesson: Lesson) => lesson.module === module.id),
+          lessons: data.lessons.filter(
+            (lesson: Lesson) => lesson.module === module.id
+          ),
         }));
       }
-      
+
       setCourse(data);
     } catch (error) {
-      console.error("Error fetching course:", error);
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +133,7 @@ export default function CourseEditorPage() {
     try {
       // Calculate order_index based on existing modules
       const existingModulesCount = course.modules?.length || 0;
-      
+
       await createModule(authToken, {
         course_id: course.id,
         title: moduleTitle,
@@ -135,7 +146,6 @@ export default function CourseEditorPage() {
       setShowModuleForm(false);
       fetchCourse(); // Refresh course data
     } catch (error) {
-      console.error("Error creating module:", error);
     } finally {
       setIsCreatingModule(false);
     }
@@ -155,7 +165,7 @@ export default function CourseEditorPage() {
       // Calculate order_index based on existing lessons in this module
       const module = course.modules?.find((m) => m.id === moduleId);
       const existingLessonsCount = module?.lessons?.length || 0;
-      
+
       await createLesson(authToken, {
         module_id: moduleId,
         title: lessonTitle,
@@ -177,7 +187,6 @@ export default function CourseEditorPage() {
       setShowLessonForm(null);
       fetchCourse(); // Refresh course data
     } catch (error) {
-      console.error("Error creating lesson:", error);
     } finally {
       setIsCreatingLesson(false);
     }
@@ -186,6 +195,72 @@ export default function CourseEditorPage() {
   const handleVideoUpload = (playbackId: string, duration: number) => {
     setLessonPlaybackId(playbackId);
     setLessonDuration(Math.round(duration));
+  };
+
+  const handleDeleteCourse = async () => {
+    if (!authToken || !course) return;
+
+    if (
+      !confirm(
+        "Are you sure you want to delete this course? This will also delete all modules and lessons in this course. This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setDeletingCourse(true);
+    try {
+      await deleteCourse(authToken, course.id);
+      router.push("/teacher");
+    } catch (error) {
+      alert("Failed to delete course. Please try again.");
+    } finally {
+      setDeletingCourse(false);
+    }
+  };
+
+  const handleDeleteModule = async (moduleId: number) => {
+    if (!authToken) return;
+
+    if (
+      !confirm(
+        "Are you sure you want to delete this module? This will also delete all lessons in this module. This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setDeletingModule(moduleId);
+    try {
+      await deleteModule(authToken, moduleId);
+      fetchCourse(); // Refresh course data
+    } catch (error) {
+      alert("Failed to delete module. Please try again.");
+    } finally {
+      setDeletingModule(null);
+    }
+  };
+
+  const handleDeleteLesson = async (lessonId: number) => {
+    if (!authToken) return;
+
+    if (
+      !confirm(
+        "Are you sure you want to delete this lesson? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setDeletingLesson(lessonId);
+    try {
+      await deleteLesson(authToken, lessonId);
+      fetchCourse(); // Refresh course data
+    } catch (error) {
+      alert("Failed to delete lesson. Please try again.");
+    } finally {
+      setDeletingLesson(null);
+    }
   };
 
   // Check if user is teacher
@@ -245,7 +320,20 @@ export default function CourseEditorPage() {
         <div className="bg-zinc-900/60 border border-zinc-700/50 rounded-2xl p-6 mb-8 backdrop-blur-sm">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-2xl font-bold mb-2">{course.title}</h1>
+              <h1
+                title={course.title}
+                className="text-2xl font-bold mb-2 break-all line-clamp-2"
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  wordBreak: "break-all",
+                  overflowWrap: "anywhere",
+                }}
+              >
+                {course.title}
+              </h1>
               <p className="text-zinc-300">{course.description}</p>
               <div className="flex items-center gap-4 mt-4">
                 <span
@@ -265,9 +353,23 @@ export default function CourseEditorPage() {
                 </span>
               </div>
             </div>
-            <Link href={`/courses/${course.slug}`} target="_blank">
-              <Button variant="outline">Preview Course</Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link href={`/courses/${course.slug}`} target="_blank">
+                <Button variant="outline">Preview Course</Button>
+              </Link>
+              <Button
+                onClick={handleDeleteCourse}
+                disabled={deletingCourse}
+                variant="destructive"
+                size="sm"
+              >
+                {deletingCourse ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Trash2 className="w-4 h-4" />
+                )}
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -290,7 +392,9 @@ export default function CourseEditorPage() {
               <h3 className="font-medium mb-4">New Module</h3>
               <form onSubmit={handleCreateModule} className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-200 font-medium">Module Title *</Label>
+                  <Label className="text-zinc-200 font-medium">
+                    Module Title *
+                  </Label>
                   <Input
                     value={moduleTitle}
                     onChange={(e) => setModuleTitle(e.target.value)}
@@ -300,7 +404,9 @@ export default function CourseEditorPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-200 font-medium">Description</Label>
+                  <Label className="text-zinc-200 font-medium">
+                    Description
+                  </Label>
                   <Textarea
                     value={moduleDescription}
                     onChange={(e) => setModuleDescription(e.target.value)}
@@ -341,11 +447,11 @@ export default function CourseEditorPage() {
                   className="bg-zinc-900/60 border border-zinc-700/50 rounded-xl overflow-hidden backdrop-blur-sm"
                 >
                   {/* Module Header */}
-                  <button
-                    onClick={() => toggleModule(module.id)}
-                    className="w-full flex items-center justify-between p-4 hover:bg-zinc-800/60 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between p-4">
+                    <button
+                      onClick={() => toggleModule(module.id)}
+                      className="flex items-center gap-3 flex-1 hover:bg-zinc-800/60 transition-colors rounded-lg p-2 -m-2"
+                    >
                       {expandedModules.has(module.id) ? (
                         <ChevronDown className="w-5 h-5 text-zinc-300" />
                       ) : (
@@ -355,8 +461,21 @@ export default function CourseEditorPage() {
                       <span className="text-sm text-zinc-400">
                         ({module.lessons?.length || 0} lessons)
                       </span>
-                    </div>
-                  </button>
+                    </button>
+                    <Button
+                      onClick={() => handleDeleteModule(module.id)}
+                      disabled={deletingModule === module.id}
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                    >
+                      {deletingModule === module.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
 
                   {/* Module Content */}
                   {expandedModules.has(module.id) && (
@@ -377,13 +496,30 @@ export default function CourseEditorPage() {
                                 )}
                                 <span className="text-sm">{lesson.title}</span>
                               </div>
-                              <span className="text-xs text-zinc-400">
-                                {lesson.duration
-                                  ? `${Math.floor(lesson.duration / 60)}:${String(
-                                      lesson.duration % 60
-                                    ).padStart(2, "0")}`
-                                  : "No video"}
-                              </span>
+                              <div className="flex items-center gap-3">
+                                <span className="text-xs text-zinc-400">
+                                  {lesson.duration
+                                    ? `${Math.floor(
+                                        lesson.duration / 60
+                                      )}:${String(
+                                        lesson.duration % 60
+                                      ).padStart(2, "0")}`
+                                    : "No video"}
+                                </span>
+                                <Button
+                                  onClick={() => handleDeleteLesson(lesson.id)}
+                                  disabled={deletingLesson === lesson.id}
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10 h-6 w-6 p-0"
+                                >
+                                  {deletingLesson === lesson.id ? (
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="w-3 h-3" />
+                                  )}
+                                </Button>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -397,9 +533,11 @@ export default function CourseEditorPage() {
                             className="space-y-4"
                           >
                             <h4 className="font-medium">New Lesson</h4>
-                            
+
                             <div className="space-y-2">
-                              <Label className="text-zinc-200 font-medium">Lesson Title *</Label>
+                              <Label className="text-zinc-200 font-medium">
+                                Lesson Title *
+                              </Label>
                               <Input
                                 value={lessonTitle}
                                 onChange={(e) =>
@@ -407,53 +545,64 @@ export default function CourseEditorPage() {
                                 }
                                 placeholder="e.g., Introduction to HTML"
                                 required
+                                maxLength={120}
                                 className="bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
                               />
                             </div>
 
                             <div className="space-y-2">
-                              <Label className="text-zinc-200 font-medium">URL Slug *</Label>
+                              <Label className="text-zinc-200 font-medium">
+                                URL Slug *
+                              </Label>
                               <Input
                                 value={lessonSlug}
                                 onChange={(e) => setLessonSlug(e.target.value)}
                                 placeholder="introduction-to-html"
                                 required
+                                maxLength={50}
                                 className="bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
                               />
                             </div>
 
                             <div className="space-y-2">
-                              <Label className="text-zinc-200 font-medium">Description</Label>
+                              <Label className="text-zinc-200 font-medium">
+                                Description
+                              </Label>
                               <Textarea
                                 value={lessonDescription}
                                 onChange={(e) =>
                                   setLessonDescription(e.target.value)
                                 }
                                 placeholder="What will students learn?"
+                                maxLength={300}
                                 className="bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
                               />
                             </div>
 
                             <div className="space-y-2">
-                              <Label className="text-zinc-200 font-medium">Video Upload</Label>
-                              <MuxUpload
-                                onUploadComplete={handleVideoUpload}
-                                onError={(err) => console.error(err)}
-                              />
+                              <Label className="text-zinc-200 font-medium">
+                                Video Upload
+                              </Label>
+                              <MuxUpload onUploadComplete={handleVideoUpload} />
                               {lessonPlaybackId && (
                                 <p className="text-sm text-green-400">
                                   ✓ Video uploaded (Duration:{" "}
                                   {Math.floor(lessonDuration / 60)}:
-                                  {String(lessonDuration % 60).padStart(2, "0")})
+                                  {String(lessonDuration % 60).padStart(2, "0")}
+                                  )
                                 </p>
                               )}
                             </div>
 
                             <div className="space-y-2">
-                              <Label className="text-zinc-200 font-medium">Lesson Content (HTML/Markdown)</Label>
+                              <Label className="text-zinc-200 font-medium">
+                                Lesson Content (HTML/Markdown)
+                              </Label>
                               <Textarea
                                 value={lessonContent}
-                                onChange={(e) => setLessonContent(e.target.value)}
+                                onChange={(e) =>
+                                  setLessonContent(e.target.value)
+                                }
                                 placeholder="Write your lesson content here..."
                                 rows={6}
                                 className="bg-zinc-900/80 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
@@ -472,7 +621,9 @@ export default function CourseEditorPage() {
                                 type="submit"
                                 className="bg-zinc-100 hover:bg-white text-zinc-900"
                                 disabled={
-                                  isCreatingLesson || !lessonTitle || !lessonSlug
+                                  isCreatingLesson ||
+                                  !lessonTitle ||
+                                  !lessonSlug
                                 }
                               >
                                 {isCreatingLesson ? (

@@ -6,7 +6,6 @@
 
 <div align="center"><b>AI-First Learning Management System powered by Xano</b></div>
 
-
 <!-- Badges: responsive horizontal list that wraps when necessary -->
 <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;max-width:500px;margin:0 auto;">
 	<a href="https://www.xano.com/" target="_blank" rel="noreferrer">
@@ -58,6 +57,7 @@
 ---
 
 <!-- Screenshots -->
+
 ## Screenshots
 
 <details>
@@ -232,14 +232,14 @@ Use these test accounts to explore the app quickly (no sign-up required on some 
 
 ## Database Schema (Xano)
 
-| Table           | Fields                                                             |
-| --------------- | ------------------------------------------------------------------ |
-| `users`         | id, email, password, first_name, last_name, tier (free|pro|ultra), role (student|teacher), avatar_url, created_at, updated_at |
-| `categories`    | id, title, slug                                                    |
-| `courses`       | id, title, slug, description, image_url, tier (free|pro|ultra), featured, category, teacher (id), module_count, lesson_count, created_at, updated_at   |
-| `modules`       | id, title, course, order_index                                     |
-| `lessons`       | id, title, slug, content, module, mux_playback_id, duration        |
-| `user_progress` | id, user, lesson, completed, completed_at                          |
+| Table           | Fields                                                      |
+| --------------- | ----------------------------------------------------------- | --- | -------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `users`         | id, email, password, first_name, last_name, tier (free      | pro | ultra), role (student                                                                        | teacher), avatar_url, created_at, updated_at |
+| `categories`    | id, title, slug                                             |
+| `courses`       | id, title, slug, description, image_url, tier (free         | pro | ultra), featured, category, teacher (id), module_count, lesson_count, created_at, updated_at |
+| `modules`       | id, title, course, order_index                              |
+| `lessons`       | id, title, slug, content, module, mux_playback_id, duration |
+| `user_progress` | id, user, lesson, completed, completed_at                   |
 
 ---
 
@@ -247,28 +247,41 @@ Use these test accounts to explore the app quickly (no sign-up required on some 
 
 📚 **Full Documentation:** [Swagger](https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk)
 
-| Endpoint                          | Method | Auth    | Description                                 |
-| --------------------------------- | ------ | ------- | ------------------------------------------- |
-| `/auth/signup`                    | POST   | No      | Register / create account                   |
-| `/auth/login`                     | POST   | No      | Login / obtain auth token                   |
-| `/auth/me`                        | GET    | Yes     | Get current authenticated user profile      |
-| `/auth/profile`                   | PATCH  | Yes     | Update authenticated user's profile         |
-| `/auth/upgrade-tier`              | POST   | Yes     | Upgrade user's subscription tier            |
-| `/courses`                        | GET    | No      | List all courses (with modules/lessons)     |
-| `/courses/featured`               | GET    | No      | Get featured courses                        |
-| `/courses/{slug}`                 | GET    | No      | Get course by slug (includes modules)       |
-| `/lessons/{slug}`                 | GET    | No      | Get lesson by slug (full content)           |
-| `/progress/complete-lesson`       | POST   | Yes     | Mark a lesson completed for current user    |
-| `/search`                         | GET    | No      | Search courses and lessons                   |
-| `/mux/signed-tokens`              | POST   | Yes     | Generate signed tokens for MUX playback     |
-| `/mux/upload-url`                 | POST   | Yes     | Generate direct upload URL for teachers     |
-| `/mux/get_asset`                  | GET    | Yes     | Get Mux asset details by asset id           |
-| `/mux/get_upload`                 | GET    | Yes     | Check Mux upload status                      |
-| `/teacher/courses`                | GET    | Teacher | Get teacher's courses                       |
-| `/teacher/courses`                | POST   | Teacher | Create a new course                         |
-| `/teacher/courses/{course_id}`    | GET    | Teacher | Get single teacher course (with modules)    |
-| `/teacher/modules`                | POST   | Teacher | Create module for a course                  |
-| `/teacher/lessons`                | POST   | Teacher | Create lesson for a module                  |
+| Endpoint                    | Method | Auth | Description                              |
+| --------------------------- | ------ | ---- | ---------------------------------------- |
+| `/auth/signup`              | POST   | No   | Register / create account                |
+| `/auth/login`               | POST   | No   | Login / obtain auth token                |
+| `/auth/me`                  | GET    | Yes  | Get current authenticated user profile   |
+| `/auth/profile`             | PATCH  | Yes  | Update authenticated user's profile      |
+| `/auth/upgrade-tier`        | POST   | Yes  | Upgrade user's subscription tier         |
+| `/courses`                  | GET    | No   | List all courses (with modules/lessons)  |
+| `/courses/featured`         | GET    | No   | Get featured courses                     |
+| `/courses/{slug}`           | GET    | No   | Get course by slug (includes modules)    |
+| `/lessons/{slug}`           | GET    | No   | Get lesson by slug (full content)        |
+| `/progress/complete-lesson` | POST   | Yes  | Mark a lesson completed for current user |
+| `/search`                   | GET    | No   | Search courses and lessons               |
+| `/mux/sign_playback`        | POST   | Yes  | Generate signed tokens for MUX playback  |
+
+## API Input Limits (recommended server-side validation)
+
+The frontend enforces input size limits, but these should also be validated server-side in Xano. Add matching `precondition` checks in your Xano endpoints (visual builder) using the limits below:
+
+- `title`: max 200 characters
+- `slug`: max 120 characters
+- `description`: max 4000 characters
+- `content`: max 20000 characters
+- `first_name` / `last_name`: max 100 characters
+- `avatar_url`: max 2048 characters
+
+Also ensure your middleware blocks extremely long URL paths (we added a guard in `proxy.ts`).
+| `/mux/upload-url` | POST | Yes | Generate direct upload URL for teachers |
+| `/mux/get_asset` | GET | Yes | Get Mux asset details by asset id |
+| `/mux/get_upload` | GET | Yes | Check Mux upload status |
+| `/teacher/courses` | GET | Teacher | Get teacher's courses |
+| `/teacher/courses` | POST | Teacher | Create a new course |
+| `/teacher/courses/{course_id}` | GET | Teacher | Get single teacher course (with modules) |
+| `/teacher/modules` | POST | Teacher | Create module for a course |
+| `/teacher/lessons` | POST | Teacher | Create lesson for a module |
 
 See [`xanoscript/`](./xanoscript/) for endpoint implementations.
 

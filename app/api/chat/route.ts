@@ -5,7 +5,9 @@ import { GoogleGenAI } from "@google/genai";
 const XANO_API_URL = process.env.NEXT_PUBLIC_XANO_API_URL || "";
 const AUTH_TOKEN_COOKIE = "xano_auth_token";
 
-const genAI = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || "" });
+const genAI = new GoogleGenAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || "",
+});
 
 const SYSTEM_PROMPT = `You are an expert AI learning assistant for an online education platform. Your role is to:
 
@@ -46,10 +48,12 @@ export async function POST(request: Request) {
     const { messages } = await request.json();
 
     // Format messages for Gemini
-    const formattedMessages = messages.map((msg: { role: string; content: string }) => ({
-      role: msg.role === "assistant" ? "model" : "user",
-      parts: [{ text: msg.content }],
-    }));
+    const formattedMessages = messages.map(
+      (msg: { role: string; content: string }) => ({
+        role: msg.role === "assistant" ? "model" : "user",
+        parts: [{ text: msg.content }],
+      })
+    );
 
     // Call Gemini 2.5 Flash
     const response = await genAI.models.generateContent({
@@ -70,7 +74,6 @@ export async function POST(request: Request) {
       content: text,
     });
   } catch (error) {
-    console.error("Chat error:", error);
     return new NextResponse(
       error instanceof Error ? error.message : "Internal server error",
       { status: 500 }

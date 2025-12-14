@@ -1,19 +1,22 @@
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, BookOpen, Play, Tag } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { TIER_STYLES } from "@/lib/constants"
-import type { Tier, User } from "@/lib/xano/types"
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, BookOpen, Play, Tag } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { TIER_STYLES } from "@/lib/constants";
+import type { Tier, User } from "@/lib/xano/types";
 
 interface CourseHeroProps {
-  title?: string | null
-  description?: string | null
-  tier?: Tier | null
-  thumbnail?: { asset?: { _id?: string; url?: string } | null } | null
-  category?: { _id?: string; title?: string | null } | null
-  moduleCount?: number | null
-  lessonCount?: number | null
-  teacher?: Pick<User, "id" | "first_name" | "last_name"> | { _id?: string; first_name?: string | null; last_name?: string | null } | null
+  title?: string | null;
+  description?: string | null;
+  tier?: Tier | null;
+  thumbnail?: { asset?: { _id?: string; url?: string } | null } | null;
+  category?: { _id?: string; title?: string | null } | null;
+  moduleCount?: number | null;
+  lessonCount?: number | null;
+  teacher?:
+    | Pick<User, "id" | "first_name" | "last_name">
+    | { _id?: string; first_name?: string | null; last_name?: string | null }
+    | null;
 }
 
 export function CourseHero({
@@ -26,9 +29,9 @@ export function CourseHero({
   lessonCount,
   teacher,
 }: CourseHeroProps) {
-  const displayTier = tier ?? "free"
-  const styles = TIER_STYLES[displayTier]
-  const imageUrl = thumbnail?.asset?.url
+  const displayTier = tier ?? "free";
+  const styles = TIER_STYLES[displayTier];
+  const imageUrl = thumbnail?.asset?.url;
 
   return (
     <div className="mb-14">
@@ -62,43 +65,75 @@ export function CourseHero({
         {/* Course Info */}
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-3 mb-5">
-            <Badge className={`${styles.text} ${styles.border} bg-transparent font-semibold px-4 py-1.5 rounded-full`}>
-              {typeof displayTier === "string" ? displayTier.toUpperCase() : "FREE"}
+            <Badge
+              className={`${styles.text} ${styles.border} bg-transparent font-semibold px-4 py-1.5 rounded-full`}
+            >
+              {typeof displayTier === "string"
+                ? displayTier.toUpperCase()
+                : "FREE"}
             </Badge>
             {category?.title && typeof category.title === "string" && (
-              <Badge variant="outline" className="border-white/10 text-muted-foreground px-4 py-1.5 rounded-full glass">
+              <Badge
+                variant="outline"
+                className="border-white/10 text-muted-foreground px-4 py-1.5 rounded-full glass"
+              >
                 <Tag className="w-3 h-3 mr-2" />
                 {category.title}
               </Badge>
             )}
           </div>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 text-gradient leading-tight">
+          <h1
+            title={typeof title === "string" ? title : "Untitled Course"}
+            className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 text-gradient leading-tight break-all line-clamp-2"
+            style={{
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              wordBreak: "break-all",
+              overflowWrap: "anywhere",
+            }}
+          >
             {typeof title === "string" ? title : "Untitled Course"}
           </h1>
 
           {teacher && (teacher.first_name || teacher.last_name) && (
-            <p className="text-sm text-muted-foreground mb-4">By {`${teacher.first_name ?? ""}${teacher.last_name ? ` ${teacher.last_name}` : ""}`.trim()}</p>
+            <p className="text-sm text-muted-foreground mb-4">
+              By{" "}
+              {`${teacher.first_name ?? ""}${
+                teacher.last_name ? ` ${teacher.last_name}` : ""
+              }`.trim()}
+            </p>
           )}
 
           {description && typeof description === "string" && (
-            <p className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-2xl">{description}</p>
+            <p
+              title={description}
+              className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-2xl line-clamp-3"
+            >
+              {description}
+            </p>
           )}
 
           <div className="flex flex-wrap items-center gap-4 text-sm">
             <div className="flex items-center gap-2 px-5 py-2.5 rounded-2xl glass border border-white/5">
               <BookOpen className="w-4 h-4 text-muted-foreground" />
-              <span className="text-foreground font-medium">{moduleCount ?? 0}</span>
+              <span className="text-foreground font-medium">
+                {moduleCount ?? 0}
+              </span>
               <span className="text-muted-foreground">modules</span>
             </div>
             <div className="flex items-center gap-2 px-5 py-2.5 rounded-2xl glass border border-white/5">
               <Play className="w-4 h-4 text-emerald-400" />
-              <span className="text-foreground font-medium">{lessonCount ?? 0}</span>
+              <span className="text-foreground font-medium">
+                {lessonCount ?? 0}
+              </span>
               <span className="text-muted-foreground">lessons</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

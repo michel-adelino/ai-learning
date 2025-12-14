@@ -45,7 +45,6 @@ export async function toggleCourseCompletion(
 
     return { success: true, isCompleted: markComplete };
   } catch (error) {
-    console.error("Failed to toggle course completion:", error);
     return { success: false, isCompleted: !markComplete };
   }
 }

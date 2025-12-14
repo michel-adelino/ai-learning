@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { CourseCard } from "./CourseCard"
-import { TierFilterTabs, type TierFilter } from "./TierFilterTabs"
-import { useUserTier, hasTierAccess } from "@/lib/hooks/use-user-tier-xano"
-import type { Course } from "@/lib/xano/types"
-import { motion } from "framer-motion"
+import { useState } from "react";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { CourseCard } from "./CourseCard";
+import { TierFilterTabs, type TierFilter } from "./TierFilterTabs";
+import { useUserTier, hasTierAccess } from "@/lib/hooks/use-user-tier-xano";
+import type { Course } from "@/lib/xano/types";
+import { motion } from "framer-motion";
 
 // Course type for the list
-export type CourseListCourse = Course
+export type CourseListCourse = Course;
 
 interface CourseListProps {
-  courses: CourseListCourse[]
-  showFilters?: boolean
-  showSearch?: boolean
-  emptyMessage?: string
+  courses: CourseListCourse[];
+  showFilters?: boolean;
+  showSearch?: boolean;
+  emptyMessage?: string;
 }
 
 export function CourseList({
@@ -25,36 +25,41 @@ export function CourseList({
   showSearch = true,
   emptyMessage = "No courses found",
 }: CourseListProps) {
-  const userTier = useUserTier()
-  const [tierFilter, setTierFilter] = useState<TierFilter>("all")
-  const [searchQuery, setSearchQuery] = useState("")
+  const userTier = useUserTier();
+  const [tierFilter, setTierFilter] = useState<TierFilter>("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Filter courses based on tier and search query
   const filteredCourses = courses.filter((course) => {
     // Tier filter
     if (tierFilter !== "all" && course.tier !== tierFilter) {
-      return false
+      return false;
     }
 
     // Search filter
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
-      const title = course.title?.toLowerCase() ?? ""
-      const description = course.description?.toLowerCase() ?? ""
+      const query = searchQuery.toLowerCase();
+      const title = course.title?.toLowerCase() ?? "";
+      const description = course.description?.toLowerCase() ?? "";
       if (!title.includes(query) && !description.includes(query)) {
-        return false
+        return false;
       }
     }
 
-    return true
-  })
+    return true;
+  });
 
   return (
     <div className="space-y-8">
       {/* Filters and Search */}
       {(showFilters || showSearch) && (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          {showFilters && <TierFilterTabs activeFilter={tierFilter} onFilterChange={setTierFilter} />}
+          {showFilters && (
+            <TierFilterTabs
+              activeFilter={tierFilter}
+              onFilterChange={setTierFilter}
+            />
+          )}
 
           {showSearch && (
             <div className="relative w-full sm:w-80">
@@ -83,6 +88,9 @@ export function CourseList({
               tier={course.tier}
               image_url={course.image_url}
               teacher={course.teacher as any}
+              teacherId={
+                (course as any).teacher_id ?? (course as any).teacherId ?? null
+              }
               moduleCount={course.module_count}
               lessonCount={course.lesson_count}
               isLocked={!hasTierAccess(userTier, course.tier)}
@@ -104,8 +112,8 @@ export function CourseList({
             <button
               type="button"
               onClick={() => {
-                setTierFilter("all")
-                setSearchQuery("")
+                setTierFilter("all");
+                setSearchQuery("");
               }}
               className="mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-lg glass"
             >
@@ -115,5 +123,5 @@ export function CourseList({
         </motion.div>
       )}
     </div>
-  )
+  );
 }

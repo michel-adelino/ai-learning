@@ -1,27 +1,29 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
-import { Lock, Play, Layers, CheckCircle2, Clock } from "lucide-react"
-import { TIER_STYLES } from "@/lib/constants"
-import type { Tier, User } from "@/lib/xano/types"
-import { motion } from "framer-motion"
+import Image from "next/image";
+import Link from "next/link";
+import { Lock, Play, Layers, CheckCircle2, Clock } from "lucide-react";
+import { TIER_STYLES } from "@/lib/constants";
+import type { Tier, User } from "@/lib/xano/types";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export interface CourseCardProps {
-  title?: string | null
-  description?: string | null
-  tier?: Tier | null
-  image_url?: string | null
-  moduleCount?: number | null
-  lessonCount?: number | null
-  teacher?: Pick<User, "id" | "first_name" | "last_name"> | null
-  slug?: string | { current: string } | null
-  href?: string
-  completedLessonCount?: number | null
-  isCompleted?: boolean
-  isLocked?: boolean
-  showProgress?: boolean
-  index?: number
+  title?: string | null;
+  description?: string | null;
+  tier?: Tier | null;
+  image_url?: string | null;
+  moduleCount?: number | null;
+  lessonCount?: number | null;
+  teacher?: Pick<User, "id" | "first_name" | "last_name"> | null;
+  teacherId?: number | null;
+  slug?: string | { current: string } | null;
+  href?: string;
+  completedLessonCount?: number | null;
+  isCompleted?: boolean;
+  isLocked?: boolean;
+  showProgress?: boolean;
+  index?: number;
 }
 
 export function CourseCard({
@@ -32,6 +34,7 @@ export function CourseCard({
   tier,
   image_url,
   teacher,
+  teacherId,
   moduleCount,
   lessonCount,
   completedLessonCount = 0,
@@ -40,16 +43,57 @@ export function CourseCard({
   showProgress = false,
   index = 0,
 }: CourseCardProps) {
-  const displayTier = tier ?? "free"
-  const styles = TIER_STYLES[displayTier]
-  const totalLessons = lessonCount ?? 0
-  const completed = completedLessonCount ?? 0
-  const progressPercent = totalLessons > 0 ? (completed / totalLessons) * 100 : 0
+  const displayTier = tier ?? "free";
+  const styles = TIER_STYLES[displayTier];
+  const totalLessons = lessonCount ?? 0;
+  const completed = completedLessonCount ?? 0;
+  const progressPercent =
+    totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
+
+  // Local state: if `teacher` object isn't provided by the API, try to fetch
+  // the teacher by `teacherId` as a client-side fallback so the UI shows
+  // real names instead of "Instructor".
+  const [localTeacher, setLocalTeacher] = useState<
+    Pick<User, "id" | "first_name" | "last_name"> | null | undefined
+  >(teacher ?? undefined);
+
+  useEffect(() => {
+    let mounted = true;
+    if (!teacher && teacherId) {
+      const base = (process.env.NEXT_PUBLIC_XANO_API_URL || "").replace(
+        /\/+$/,
+        ""
+      );
+      if (!base) return;
+      (async () => {
+        try {
+          const res = await fetch(`${base}/users/${teacherId}`);
+          if (!mounted) return;
+          if (!res.ok) return;
+          const data = await res.json();
+          setLocalTeacher({
+            id: data.id,
+            first_name: data.first_name ?? null,
+            last_name: data.last_name ?? null,
+          });
+        } catch {
+          // ignore
+        }
+      })();
+    } else {
+      setLocalTeacher(teacher ?? undefined);
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [teacher, teacherId]);
+
+  const resolvedTeacher = localTeacher ?? teacher ?? null;
 
   // Handle slug as either string or object
-  const slugValue = typeof slug === "string" ? slug : (slug?.current ?? "")
-  const linkHref = href ?? `/courses/${slugValue}`
-  const imageUrl = image_url ?? null
+  const slugValue = typeof slug === "string" ? slug : slug?.current ?? "";
+  const linkHref = href ?? `/courses/${slugValue}`;
+  const imageUrl = image_url ?? null;
 
   return (
     <motion.div
@@ -120,12 +164,17 @@ export function CourseCard({
                 <div className="flex flex-col items-center gap-3">
                   <motion.div
                     animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                    }}
                     className="w-16 h-16 rounded-2xl glass flex items-center justify-center border border-white/10"
                   >
                     <Lock className="w-7 h-7 text-muted-foreground" />
                   </motion.div>
-                  <span className="text-sm text-muted-foreground font-medium">Upgrade to unlock</span>
+                  <span className="text-sm text-muted-foreground font-medium">
+                    Upgrade to unlock
+                  </span>
                 </div>
               </motion.div>
             )}
@@ -133,28 +182,48 @@ export function CourseCard({
 
           {/* Course content */}
           <div className="p-4 sm:p-5 md:p-6 relative">
-            <h3 className="text-base sm:text-lg font-bold mb-2.5 text-foreground group-hover:text-gradient transition-all duration-300 line-clamp-2">
+            <h3
+              title={title ?? "Untitled Course"}
+              className="text-base sm:text-lg font-bold mb-2.5 text-foreground group-hover:text-gradient transition-all duration-300 line-clamp-2 break-all"
+              style={{ wordBreak: "break-all", overflowWrap: "anywhere" }}
+            >
               {title ?? "Untitled Course"}
             </h3>
 
-              {/* Teacher name */}
-              {teacher && (
-                <p className="text-sm text-muted-foreground mb-1">By {`${teacher.first_name ?? ""}${teacher.last_name ? ` ${teacher.last_name}` : ""}`.trim() || "Instructor"}</p>
-              )}
+            {/* Teacher name */}
+            <p className="text-sm text-muted-foreground mb-1">
+              By{" "}
+              {resolvedTeacher
+                ? `${resolvedTeacher.first_name ?? ""}${
+                    resolvedTeacher.last_name
+                      ? ` ${resolvedTeacher.last_name}`
+                      : ""
+                  }`.trim() || "Instructor"
+                : "Instructor"}
+            </p>
 
-              {description && (
-              <p className="text-sm text-muted-foreground mb-4 sm:mb-5 line-clamp-2 leading-relaxed">{description}</p>
+            {description && (
+              <p
+                title={description}
+                className="text-sm text-muted-foreground mb-4 sm:mb-5 line-clamp-2 leading-relaxed"
+              >
+                {description}
+              </p>
             )}
 
             <div className="flex items-center gap-3 text-sm">
               <span className="flex items-center gap-2 px-3 py-2 rounded-xl glass border border-white/5">
                 <Layers className="w-4 h-4 text-muted-foreground" />
-                <span className="text-foreground font-medium">{moduleCount ?? 0}</span>
+                <span className="text-foreground font-medium">
+                  {moduleCount ?? 0}
+                </span>
                 <span className="text-muted-foreground">modules</span>
               </span>
               <span className="flex items-center gap-2 px-3 py-2 rounded-xl glass border border-white/5">
                 <Play className="w-4 h-4 text-muted-foreground" />
-                <span className="text-foreground font-medium">{lessonCount ?? 0}</span>
+                <span className="text-foreground font-medium">
+                  {lessonCount ?? 0}
+                </span>
                 <span className="text-muted-foreground">lessons</span>
               </span>
             </div>
@@ -167,13 +236,19 @@ export function CourseCard({
                     <Clock className="w-4 h-4" />
                     {completed}/{totalLessons} completed
                   </span>
-                  <span className="text-foreground font-semibold">{Math.round(progressPercent)}%</span>
+                  <span className="text-foreground font-semibold">
+                    {Math.round(progressPercent)}%
+                  </span>
                 </div>
                 <div className="relative h-2.5 glass rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPercent}%` }}
-                    transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{
+                      duration: 1,
+                      delay: 0.5,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
                     className="absolute inset-y-0 left-0 bg-gradient-to-r from-white/60 to-white/80 rounded-full"
                   />
                 </div>
@@ -183,5 +258,5 @@ export function CourseCard({
         </div>
       </Link>
     </motion.div>
-  )
+  );
 }

@@ -16,6 +16,7 @@ import {
   getCurrentUser,
   updateProfile as apiUpdateProfile,
   upgradeTier as apiUpgradeTier,
+  deleteAccount as apiDeleteAccount,
 } from "@/lib/xano/client";
 
 const AUTH_TOKEN_KEY = "xano_auth_token";
@@ -53,6 +54,7 @@ interface AuthContextType {
     avatar_url?: string;
   }) => Promise<void>;
   upgradeTier: (tier: "pro" | "ultra") => Promise<void>;
+  deleteAccount: () => Promise<void>;
   refreshUser: () => Promise<void>;
   hasTier: (tier: Tier) => boolean;
 }
@@ -117,7 +119,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     ) => {
       setIsLoading(true);
       try {
-        const response = await apiSignup(email, password, firstName, lastName, role);
+        const response = await apiSignup(
+          email,
+          password,
+          firstName,
+          lastName,
+          role
+        );
         localStorage.setItem(AUTH_TOKEN_KEY, response.authToken);
         setAuthCookie(response.authToken);
         setAuthToken(response.authToken);
@@ -130,12 +138,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const logout = useCallback(() => {
+    // Clear all auth data immediately
     localStorage.removeItem(AUTH_TOKEN_KEY);
     removeAuthCookie();
     setAuthToken(null);
     setUser(null);
-    router.push("/");
-  }, [router]);
+
+    // Force a hard navigation to clear any cached state
+    window.location.href = "/";
+  }, []);
 
   const updateProfile = useCallback(
     async (data: {
@@ -170,10 +181,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [authToken, logout]);
 
+  const deleteAccount = useCallback(async () => {
+    if (!authToken) throw new Error("Not authenticated");
+    await apiDeleteAccount(authToken);
+    // Clear all auth data
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    removeAuthCookie();
+    setAuthToken(null);
+    setUser(null);
+    router.push("/");
+  }, [authToken, router]);
+
   const hasTier = useCallback(
     (tier: Tier): boolean => {
       if (!user) return false;
-      
+
       const tierHierarchy: Record<Tier, number> = {
         free: 0,
         pro: 1,
@@ -197,6 +219,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         updateProfile,
         upgradeTier,
+        deleteAccount,
         refreshUser,
         hasTier,
       }}

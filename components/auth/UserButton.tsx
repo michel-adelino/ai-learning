@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -19,9 +20,12 @@ import { motion } from "framer-motion"
 export function UserButton() {
   const { user, logout, isAuthenticated, isLoading } = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const pathname = usePathname()
+
+  const isOnDashboard = pathname === "/dashboard"
 
   if (isLoading) {
-    return <div className="w-9 h-9 rounded-full glass animate-pulse" />
+    return <div className="w-10 h-10 rounded-full glass animate-pulse" />
   }
 
   if (!isAuthenticated || !user) {
@@ -59,7 +63,7 @@ export function UserButton() {
           </motion.div>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60 glass-heavy rounded-xl border-white/10 p-2" align="end">
+      <DropdownMenuContent className="absolute right-0 w-6 glass-heavy rounded-xl border-white/10 p-2" align="end">
         <div className="flex items-center gap-3 p-3">
           <Avatar className="h-10 w-10 border border-white/10">
             <AvatarImage src={user.avatar_url || undefined} alt={user.email} />
@@ -77,15 +81,17 @@ export function UserButton() {
           </div>
         </div>
         <DropdownMenuSeparator className="bg-white/5 my-1" />
-        <DropdownMenuItem asChild>
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-3 text-muted-foreground hover:text-foreground cursor-pointer py-2.5 px-3 rounded-lg"
-          >
-            <User className="w-4 h-4" />
-            Dashboard
-          </Link>
-        </DropdownMenuItem>
+        {!isOnDashboard && (
+          <DropdownMenuItem asChild>
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-3 text-muted-foreground hover:text-foreground cursor-pointer py-2.5 px-3 rounded-lg"
+            >
+              <User className="w-4 h-4" />
+              Dashboard
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
           <Link
             href="/settings"

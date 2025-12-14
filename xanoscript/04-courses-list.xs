@@ -17,12 +17,18 @@ query courses verb=GET {
     db.query lessons {
       sort = {lessons.order_index: "asc"}
     } as $allLessons
+    
+    // Also fetch users so we can attach teacher names on the client if desired
+    db.query users {
+      sort = {users.id: "asc"}
+    } as $allUsers
   }
 
   response = {
     courses: $courses
     modules: $allModules
     lessons: $allLessons
+    users: $allUsers
   }
 
   tags = ["courses"]

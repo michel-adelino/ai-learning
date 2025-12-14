@@ -49,7 +49,6 @@ export async function getMuxSignedTokens(
       storyboardToken: tokens.storyboard,
     };
   } catch (error) {
-    console.error("Failed to get MUX tokens:", error);
     return {
       playbackToken: null,
       thumbnailToken: null,
@@ -95,7 +94,6 @@ export async function createMuxUploadUrl(): Promise<{
       uploadId: data.upload_id,
     };
   } catch (error) {
-    console.error("MUX upload URL creation error:", error);
     return {
       uploadUrl: null,
       uploadId: null,
@@ -124,11 +122,14 @@ export async function getMuxUploadStatus(uploadId: string): Promise<{
   const XANO_API_URL = process.env.NEXT_PUBLIC_XANO_API_URL || "";
 
   try {
-    const response = await fetch(`${XANO_API_URL}/mux/upload-status/${uploadId}`, {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
+    const response = await fetch(
+      `${XANO_API_URL}/mux/upload-status/${uploadId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to get upload status");
@@ -141,7 +142,6 @@ export async function getMuxUploadStatus(uploadId: string): Promise<{
       assetId: data.asset_id,
     };
   } catch (error) {
-    console.error("MUX status check error:", error);
     return {
       status: null,
       playbackId: null,

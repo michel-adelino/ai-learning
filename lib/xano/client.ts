@@ -21,9 +21,15 @@ import type {
 
 const XANO_API_URL = process.env.NEXT_PUBLIC_XANO_API_URL || "";
 
+// Input validation limits (server-side guard in client helper)
+const MAX_TITLE_LENGTH = 200;
+const MAX_SLUG_LENGTH = 120;
+const MAX_DESCRIPTION_LENGTH = 4000;
+const MAX_CONTENT_LENGTH = 20000;
+
 class XanoApiError extends Error {
   status: number;
-  
+
   constructor(message: string, status: number) {
     super(message);
     this.name = "XanoApiError";
@@ -36,16 +42,27 @@ async function fetchApi<T>(
   options: RequestInit = {},
   authToken?: string | null
 ): Promise<T> {
+  if (!XANO_API_URL) {
+    throw new XanoApiError(
+      "Environment variable NEXT_PUBLIC_XANO_API_URL is not set. Set NEXT_PUBLIC_XANO_API_URL to your Xano base URL (e.g. https://your-instance.xano.io) in your .env and restart the dev server.",
+      500
+    );
+  }
+  const base = XANO_API_URL.replace(/\/+$/, "");
+  const path = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     ...options.headers,
   };
 
   if (authToken) {
-    (headers as Record<string, string>)["Authorization"] = `Bearer ${authToken}`;
+    (headers as Record<string, string>)[
+      "Authorization"
+    ] = `Bearer ${authToken}`;
   }
 
-  const response = await fetch(`${XANO_API_URL}${endpoint}`, {
+  const response = await fetch(`${base}${path}`, {
     ...options,
     headers,
   });
@@ -82,7 +99,10 @@ export async function signup(
   });
 }
 
-export async function login(email: string, password: string): Promise<AuthResponse> {
+export async function login(
+  email: string,
+  password: string
+): Promise<AuthResponse> {
   return fetchApi<AuthResponse>("/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
@@ -131,35 +151,85 @@ interface CoursesListResponse {
   courses: Course[];
   modules: Module[];
   lessons: Lesson[];
+  // Optional users list if the API returns teacher/user data alongside courses
+  users?: Pick<import("./types").User, "id" | "first_name" | "last_name">[];
 }
 
 export async function getAllCourses(): Promise<Course[]> {
   const response = await fetchApi<CoursesListResponse>("/courses");
-  
-  // Calculate module and lesson counts for each course
-  return response.courses.map(course => ({
-    ...course,
-    module_count: response.modules.filter(m => m.course === course.id).length,
-    lesson_count: response.lessons.filter(l => 
-      response.modules.some(m => m.id === l.module && m.course === course.id)
-    ).length,
-  }));
+
+  // Map users (if returned) by id for quick lookup. If the `/courses` endpoint
+  // did not include `users`, try fetching `/users` as a fallback so server-side
+  // rendered pages get teacher names.
+  const userMap = new Map<
+    number,
+    { id: number; first_name: string | null; last_name: string | null }
+  >();
+  if (response.users && Array.isArray(response.users)) {
+    for (const u of response.users) {
+      userMap.set(u.id as number, {
+        id: u.id as number,
+        first_name: u.first_name ?? null,
+        last_name: u.last_name ?? null,
+      });
+    }
+  } else {
+    try {
+      const users = await fetchApi<
+        Pick<User, "id" | "first_name" | "last_name">[]
+      >("/users");
+      if (users && Array.isArray(users)) {
+        for (const u of users) {
+          userMap.set(u.id as number, {
+            id: u.id as number,
+            first_name: u.first_name ?? null,
+            last_name: u.last_name ?? null,
+          });
+        }
+      }
+    } catch (err) {
+      // ignore — best-effort fallback
+    }
+  }
+
+  return response.courses.map((course) => {
+    const teacherId =
+      course.teacher_id ??
+      (typeof course.teacher === "number" ? course.teacher : null);
+    const attachedTeacher = teacherId
+      ? userMap.get(teacherId) ?? undefined
+      : undefined;
+    return {
+      ...course,
+      module_count: response.modules.filter((m) => m.course === course.id)
+        .length,
+      lesson_count: response.lessons.filter((l) =>
+        response.modules.some(
+          (m) => m.id === l.module && m.course === course.id
+        )
+      ).length,
+      teacher: attachedTeacher,
+      teacher_id: teacherId ?? undefined,
+    };
+  });
 }
 
 export async function getFeaturedCourses(): Promise<Course[]> {
   const response = await fetchApi<CoursesListResponse>("/courses/featured");
-  
+
   // Calculate module and lesson counts for each course
-  return response.courses.map(course => ({
+  return response.courses.map((course) => ({
     ...course,
-    module_count: response.modules.filter(m => m.course === course.id).length,
-    lesson_count: response.lessons.filter(l => 
-      response.modules.some(m => m.id === l.module && m.course === course.id)
+    module_count: response.modules.filter((m) => m.course === course.id).length,
+    lesson_count: response.lessons.filter((l) =>
+      response.modules.some((m) => m.id === l.module && m.course === course.id)
     ).length,
   }));
 }
 
-export async function getCourseBySlug(slug: string): Promise<CourseWithModules> {
+export async function getCourseBySlug(
+  slug: string
+): Promise<CourseWithModules> {
   return fetchApi<CourseWithModules>(`/courses/${slug}`);
 }
 
@@ -173,17 +243,19 @@ export async function getCourseWithProgress(
 
 // Get user's courses with their progress
 // Note: This uses the regular /courses endpoint since /courses/my-progress doesn't exist yet
-export async function getUserCoursesWithProgress(
-  authToken: string
-): Promise<Array<Course & { 
-  completed_lesson_count: number; 
-  lesson_count: number;
-  module_count: number;
-  is_completed: boolean;
-}>> {
+export async function getUserCoursesWithProgress(authToken: string): Promise<
+  Array<
+    Course & {
+      completed_lesson_count: number;
+      lesson_count: number;
+      module_count: number;
+      is_completed: boolean;
+    }
+  >
+> {
   // Fallback to regular courses list - progress tracking would need to be added to Xano
   const courses = await fetchApi<Course[]>("/courses", {}, authToken);
-  return courses.map(course => ({
+  return courses.map((course) => ({
     ...course,
     completed_lesson_count: 0,
     lesson_count: course.lesson_count || 0,
@@ -194,8 +266,35 @@ export async function getUserCoursesWithProgress(
 
 // ============ Lessons API ============
 
-export async function getLessonBySlug(slug: string): Promise<LessonWithContext> {
-  return fetchApi<LessonWithContext>(`/lessons/${slug}`);
+export async function getLessonBySlug(
+  slug: string
+): Promise<LessonWithContext> {
+  // The Xano `/lessons/{slug}` endpoint returns a lesson with a `course`
+  // object that includes `modules` and `all_lessons` separately. The
+  // frontend expects each module to include its `lessons` array. Map the
+  // response to attach lessons to their parent modules.
+  const raw = await fetchApi<any>(`/lessons/${slug}`);
+
+  const lesson: any = raw;
+  const course = lesson.course || null;
+
+  if (
+    course &&
+    Array.isArray(course.modules) &&
+    Array.isArray(course.all_lessons)
+  ) {
+    const modulesWithLessons = course.modules.map((m: any) => ({
+      ...m,
+      lessons: course.all_lessons.filter((l: any) => l.module === m.id),
+    }));
+
+    lesson.course = {
+      ...course,
+      modules: modulesWithLessons,
+    };
+  }
+
+  return lesson as LessonWithContext;
 }
 
 // ============ Progress API ============
@@ -271,7 +370,9 @@ export async function searchCourses(
   perPage = 20
 ): Promise<SearchResult> {
   return fetchApi<SearchResult>(
-    `/search?query=${encodeURIComponent(query)}&page=${page}&per_page=${perPage}`
+    `/search?query=${encodeURIComponent(
+      query
+    )}&page=${page}&per_page=${perPage}`
   );
 }
 
@@ -284,14 +385,18 @@ interface TeacherCoursesResponse {
 }
 
 export async function getTeacherCourses(authToken: string): Promise<Course[]> {
-  const response = await fetchApi<TeacherCoursesResponse>("/teacher/courses", {}, authToken);
-  
+  const response = await fetchApi<TeacherCoursesResponse>(
+    "/teacher/courses",
+    {},
+    authToken
+  );
+
   // Attach module and lesson counts to each course
-  return response.courses.map(course => ({
+  return response.courses.map((course) => ({
     ...course,
-    module_count: response.modules.filter(m => m.course === course.id).length,
-    lesson_count: response.lessons.filter(l => 
-      response.modules.some(m => m.id === l.module && m.course === course.id)
+    module_count: response.modules.filter((m) => m.course === course.id).length,
+    lesson_count: response.lessons.filter((l) =>
+      response.modules.some((m) => m.id === l.module && m.course === course.id)
     ).length,
   }));
 }
@@ -300,7 +405,11 @@ export async function getTeacherCourseById(
   authToken: string,
   courseId: number
 ): Promise<CourseWithModules> {
-  return fetchApi<CourseWithModules>(`/teacher/courses/${courseId}`, {}, authToken);
+  return fetchApi<CourseWithModules>(
+    `/teacher/courses/${courseId}`,
+    {},
+    authToken
+  );
 }
 
 export async function createCourse(
@@ -314,6 +423,16 @@ export async function createCourse(
     tier?: "free" | "pro" | "ultra";
   }
 ): Promise<Course> {
+  // Server-side guard: validate input sizes before sending to Xano
+  if (data.title && data.title.length > MAX_TITLE_LENGTH) {
+    throw new XanoApiError("Title too long", 400);
+  }
+  if (data.slug && data.slug.length > MAX_SLUG_LENGTH) {
+    throw new XanoApiError("Slug too long", 400);
+  }
+  if (data.description && data.description.length > MAX_DESCRIPTION_LENGTH) {
+    throw new XanoApiError("Description too long", 400);
+  }
   return fetchApi<Course>(
     "/teacher/courses",
     {
@@ -333,6 +452,12 @@ export async function createModule(
     order_index?: number;
   }
 ): Promise<Module> {
+  if (data.title && data.title.length > MAX_TITLE_LENGTH) {
+    throw new XanoApiError("Module title too long", 400);
+  }
+  if (data.description && data.description.length > MAX_DESCRIPTION_LENGTH) {
+    throw new XanoApiError("Module description too long", 400);
+  }
   return fetchApi<Module>(
     "/teacher/modules",
     {
@@ -356,6 +481,18 @@ export async function createLesson(
     order_index?: number;
   }
 ): Promise<Lesson> {
+  if (data.title && data.title.length > MAX_TITLE_LENGTH) {
+    throw new XanoApiError("Lesson title too long", 400);
+  }
+  if (data.slug && data.slug.length > MAX_SLUG_LENGTH) {
+    throw new XanoApiError("Lesson slug too long", 400);
+  }
+  if (data.description && data.description.length > MAX_DESCRIPTION_LENGTH) {
+    throw new XanoApiError("Lesson description too long", 400);
+  }
+  if (data.content && data.content.length > MAX_CONTENT_LENGTH) {
+    throw new XanoApiError("Lesson content too long", 400);
+  }
   return fetchApi<Lesson>(
     "/teacher/lessons",
     {
@@ -386,14 +523,22 @@ export async function getMuxUploadStatus(
   authToken: string,
   uploadId: string
 ): Promise<MuxUploadStatus> {
-  return fetchApi<MuxUploadStatus>(`/mux/get_upload?upload_id=${encodeURIComponent(uploadId)}`, {}, authToken);
+  return fetchApi<MuxUploadStatus>(
+    `/mux/get_upload?upload_id=${encodeURIComponent(uploadId)}`,
+    {},
+    authToken
+  );
 }
 
 export async function getMuxAssetStatus(
   authToken: string,
   assetId: string
 ): Promise<MuxAsset> {
-  return fetchApi<MuxAsset>(`/mux/get_asset?asset_id=${encodeURIComponent(assetId)}`, {}, authToken);
+  return fetchApi<MuxAsset>(
+    `/mux/get_asset?asset_id=${encodeURIComponent(assetId)}`,
+    {},
+    authToken
+  );
 }
 
 export async function getMuxSignedTokens(
@@ -405,6 +550,59 @@ export async function getMuxSignedTokens(
     {
       method: "POST",
       body: JSON.stringify({ playback_id: playbackId }),
+    },
+    authToken
+  );
+}
+
+// ============ Deletion API ============
+
+export async function deleteAccount(
+  authToken: string
+): Promise<{ success: boolean; message: string }> {
+  return fetchApi<{ success: boolean; message: string }>(
+    "/delete_user_account",
+    {
+      method: "DELETE",
+    },
+    authToken
+  );
+}
+
+export async function deleteCourse(
+  authToken: string,
+  courseId: number
+): Promise<{ success: boolean; message: string }> {
+  return fetchApi<{ success: boolean; message: string }>(
+    `delete_course/${courseId}`,
+    {
+      method: "DELETE",
+    },
+    authToken
+  );
+}
+
+export async function deleteModule(
+  authToken: string,
+  moduleId: number
+): Promise<{ success: boolean; message: string }> {
+  return fetchApi<{ success: boolean; message: string }>(
+    `teacher/modules/${moduleId}`,
+    {
+      method: "DELETE",
+    },
+    authToken
+  );
+}
+
+export async function deleteLesson(
+  authToken: string,
+  lessonId: number
+): Promise<{ success: boolean; message: string }> {
+  return fetchApi<{ success: boolean; message: string }>(
+    `teacher/lessons/${lessonId}`,
+    {
+      method: "DELETE",
     },
     authToken
   );

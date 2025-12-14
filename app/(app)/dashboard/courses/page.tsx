@@ -1,26 +1,24 @@
-import { redirect } from "next/navigation"
-import Link from "next/link"
-import { BookOpen, ArrowRight } from "lucide-react"
-import { Header } from "@/components/Header"
-import { CourseCard } from "@/components/courses"
-import { getAllCourses } from "@/lib/xano/client"
-import { getServerUser, getUserTier } from "@/lib/xano/server-auth"
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { BookOpen, ArrowRight } from "lucide-react";
+import { Header } from "@/components/Header";
+import { CourseCard } from "@/components/courses";
+import { getAllCourses } from "@/lib/xano/client";
+import { getServerUser, getUserTier } from "@/lib/xano/server-auth";
 
 export default async function MyCoursesPage() {
-  const user = await getServerUser()
+  const user = await getServerUser();
 
   if (!user) {
-    redirect("/")
+    redirect("/");
   }
 
-  const userTier = await getUserTier()
+  const userTier = await getUserTier();
 
-  let courses: Awaited<ReturnType<typeof getAllCourses>> = []
+  let courses: Awaited<ReturnType<typeof getAllCourses>> = [];
   try {
-    courses = await getAllCourses()
-  } catch (error) {
-    console.error("Error fetching courses:", error)
-  }
+    courses = await getAllCourses();
+  } catch (error) {}
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
@@ -42,16 +40,26 @@ export default async function MyCoursesPage() {
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400/50" />
-            <span className="text-sm text-muted-foreground font-medium">Course Catalog</span>
+            <span className="text-sm text-muted-foreground font-medium">
+              Course Catalog
+            </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gradient mb-2">All Courses</h1>
-          <p className="text-muted-foreground">Explore our full catalog of courses and start learning</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-gradient mb-2">
+            All Courses
+          </h1>
+          <p className="text-muted-foreground">
+            Explore our full catalog of courses and start learning
+          </p>
         </div>
 
         {courses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.map((course, index) => (
-              <div key={course.slug} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div
+                key={course.slug}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <CourseCard
                   title={course.title}
                   slug={course.slug}
@@ -69,9 +77,12 @@ export default async function MyCoursesPage() {
             <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center mx-auto mb-4">
               <BookOpen className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h3 className="text-xl font-semibold mb-2 text-foreground">No courses available yet</h3>
+            <h3 className="text-xl font-semibold mb-2 text-foreground">
+              No courses available yet
+            </h3>
             <p className="text-muted-foreground max-w-md mx-auto mb-6">
-              Check back soon for new courses, or contact us if you think this is an error.
+              Check back soon for new courses, or contact us if you think this
+              is an error.
             </p>
             <Link
               href="/dashboard"
@@ -84,5 +95,5 @@ export default async function MyCoursesPage() {
         )}
       </main>
     </div>
-  )
+  );
 }

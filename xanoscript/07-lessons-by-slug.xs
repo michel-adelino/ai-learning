@@ -12,7 +12,7 @@ query lessons/{slug} verb=GET {
     } as $lesson
 
     precondition ($lesson != null) {
-      error_type = "not_found"
+      error_type = "inputerror"
       error = "Lesson not found."
     }
 

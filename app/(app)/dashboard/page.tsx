@@ -10,15 +10,21 @@ export default async function DashboardPage() {
     redirect("/");
   }
 
-  const [courses, userTier] = await Promise.all([
-    getAllCourses().catch(() => []),
-    getUserTier(),
-  ]);
+  let courses: any[] = [];
+  const userTierPromise = getUserTier();
+  try {
+    courses = await getAllCourses();
+  } catch (err) {
+    // Log server-side so you can see the error in the dev server console
+    courses = [];
+  }
+
+  const userTier = await userTierPromise;
 
   const firstName = user.first_name ?? "there";
 
   return (
-    <DashboardClient 
+    <DashboardClient
       firstName={firstName}
       userTier={userTier}
       transformedCourses={courses}
