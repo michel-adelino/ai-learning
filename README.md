@@ -1,9 +1,3 @@
-![Simply-Learn](https://socialify.git.ci/ARYPROGRAMMER/Simply-Learn/image?description=1&font=KoHo&forks=1&language=1&name=1&owner=1&pattern=Circuit+Board&stargazers=1&theme=Dark)
-
-<p align="center">
-	<img src="public/logo-white.svg" alt="Simply Learn" width="320" />
-</p>
-
 <div align="center"><b>AI-First Learning Management System powered by Xano</b></div>
 
 <!-- Badges: responsive horizontal list that wraps when necessary -->
@@ -11,7 +5,7 @@
 	<a href="https://www.xano.com/" target="_blank" rel="noreferrer">
 		<img src="https://img.shields.io/badge/Xano-Backend%20%26%20Database-00DC82?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMOSAyMUwxOSAxNVY1TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==" alt="Xano Backend" />
 	</a>
-	<a href="https://simply-learn-xano.vercel.app/" target="_blank" rel="noreferrer">
+	<a href="https://learn-app.vercel.app/" target="_blank" rel="noreferrer">
 		<img src="https://img.shields.io/badge/Test%20the%20App-Live%20Demo-2563EB?style=for-the-badge&logo=vercel" alt="Live Demo" />
 	</a>
 	<a href="https://nextjs.org/" target="_blank" rel="noreferrer">
@@ -31,18 +25,6 @@
 	</a>
 </div>
 
-<!-- Links: inline centered -->
-<div style="text-align:center;margin-top:8px;line-height:1.6;">
-	<div style="display:inline-flex;gap:12px;align-items:center;justify-content:center;">
-			<a href="https://simply-learn-xano.vercel.app/" target="_blank" rel="noreferrer">Live demo</a>
-		<span aria-hidden="true">|</span>
-		<a href="https://xr83-nvl3-j8b3.n7e.xano.io/api:CPmqNnhk" target="_blank" rel="noreferrer">API (Swagger)</a>
-		<span aria-hidden="true">|</span>
-			<a href="https://www.xano.com/" target="_blank" rel="noreferrer">Xano Backend</a>
-			<span aria-hidden="true">|</span>
-			<a href="https://youtu.be/r6rAGLxCMT0" target="_blank" rel="noreferrer">Demo Video</a>
-	</div>
-</div>
 
 ---
 
@@ -207,7 +189,7 @@ Xano replaced what would typically be an entire backend codebase. All API logic 
 ## Quick Start
 
 ```bash
-git clone https://github.com/ARYPROGRAMMER/simply-learn.git
+git clone 
 cd simply-learn
 pnpm install
 cp .env.example .env.local
@@ -322,7 +304,7 @@ xanoscript/          # Xano endpoint logic (20 endpoints)
 
 ## License
 
-MIT License © 2025 [Arya Pratap Singh](https://github.com/ARYPROGRAMMER)
+MIT License © 2025
 
 ---
 
