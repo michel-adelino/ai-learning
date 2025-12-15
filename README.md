@@ -17,9 +17,6 @@
 	<a href="https://www.mux.com/" target="_blank" rel="noreferrer">
 		<img src="https://img.shields.io/badge/MUX-Video-FF5A5F?style=for-the-badge" alt="MUX" />
 	</a>
-	<a href="https://youtu.be/r6rAGLxCMT0" target="_blank" rel="noreferrer">
-		<img src="https://img.shields.io/badge/Demo%20Video-YouTube-FF0000?style=for-the-badge&logo=youtube" alt="Demo Video" />
-	</a>
 	<a href="./LICENSE">
 		<img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="MIT License" />
 	</a>
